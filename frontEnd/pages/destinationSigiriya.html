@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sigiriya | SmartTraveler</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --dark: #0f172a;
+            --accent: #13e4db;
+            --bg: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+        }
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .btn-back { color: white; background: rgba(255, 255, 255, 0.15); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); text-decoration: none; }
+        .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; }
+        .logo span { color: var(--sl-gold); }
+
+        .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: white; font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--sl-gold); }
+
+        .btn-logout { background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; display: flex; align-items: center; gap: 8px; }
+        .btn-logout:hover { background: var(--logout-red) !important; transform: translateY(-2px); }
+
+
+        /* HERO */
+        .hero {
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)),
+            url('https://www.srilankanexpeditions.com/images/destinations-in-sri-lanka/best-things-to-do-in-sigiriya/slider1.jpg') center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: -50px auto 60px;
+            padding: 0 20px;
+        }
+
+        h2 {
+            margin: 40px 0 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 15px;
+        }
+
+        .card-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .card-info p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            min-height: 40px;
+        }
+
+        .price {
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        /* BUTTONS */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-main {
+            background: var(--dark);
+            color: white;
+        }
+
+        .btn-main:hover {
+            background: #1e293b;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            nav {
+                padding: 12px 5%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 300px;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+        }
+
+        .grid {
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+
+            .menu-toggle {
+                display: block !important;
+                cursor: pointer;
+                z-index: 2100;
+            }
+
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                background: #0f172a;
+                flex-direction: column;
+                padding: 80px 40px;
+                transition: 0.4s ease-in-out;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+            }
+
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<nav id="mainNav">
+    <div class="nav-left">
+        <a href="destinations.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+        <a href="#" class="logo">Smart<span>Traveler</span></a>
+    </div>
+    <div class="menu-toggle" id="mobile-menu" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </div>
+    <ul  id="nav-list" class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="hotel.html">Hotels</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="activity.html">Activity</a></li>
+        <li><a href="tripPlanner.html">Trip Builder</a></li>
+        <!--    <li><a href="#">Booking</a></li>-->
+        <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>Explore Sigiriya</h1>
+</section>
+
+<div class="container">
+<br>
+    <h2><i class="fas fa-hotel"></i> Hotels</h2>
+    <div class="grid" id="hotelContainer"></div>
+
+    <h2><i class="fas fa-hiking"></i> Activities</h2>
+    <div class="grid" id="activityContainer"></div>
+
+</div>
+<footer>
+    <p>&copy; 2026 SmartTraveler. Discover Sri Lanka.</p>
+</footer>
+<script>
+    const menuBtn = document.getElementById('mobile-menu');
+    const navList = document.getElementById('nav-list');
+
+    if (menuBtn && navList) {
+        menuBtn.addEventListener('click', () => {
+
+            navList.classList.toggle('active');
+
+
+            const icon = menuBtn.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            }
+        });
+    }
+    async function loadSigiriyaData() {
+        try {
+            const res = await fetch("http://localhost:8080/api/v1/sigiriya");
+            const data = await res.json();
+            displayData(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function displayData(items) {
+
+        const hotelContainer = document.getElementById("hotelContainer");
+        const activityContainer = document.getElementById("activityContainer");
+
+        hotelContainer.innerHTML = "";
+        activityContainer.innerHTML = "";
+
+        items.forEach(item => {
+
+            const card = `
+        <div class="card">
+            <img src="${item.image}" alt="">
+            <div class="card-info">
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+
+                <div class="price">Rs. ${item.pricePerNight}</div>
+
+                <button class="btn btn-main"
+                    onclick="bookNow('${item.name}', ${item.pricePerNight}, '${item.type}')">
+                    Book Now
+                </button>
+
+                <a href="tripPlanner.html?add=${item.id}" class="btn btn-main" style="margin-top:8px; display:block;">
+                    Add to Trip Planner
+                </a>
+            </div>
+        </div>
+        `;
+
+            if(item.type === "Hotel"){
+                hotelContainer.innerHTML += card;
+            } else {
+                activityContainer.innerHTML += card;
+            }
+        });
+    }
+
+    function bookNow(name, price, type){
+
+        const tempTrip = {
+            destName: name,
+            stayType: type,
+            cost: price
+        };
+
+        localStorage.setItem("tempTrip", JSON.stringify(tempTrip));
+        window.location.href = "Booking.html";
+    }
+
+    window.onload = loadSigiriyaData;
+
+</script>
+
+</body>
+</html>

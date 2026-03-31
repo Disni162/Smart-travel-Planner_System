@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTraveler Admin | Destinations</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-dark:#023e8a;
+            --sidebar-bg:#fff;
+            --main-bg:#f0f5f9;
+            --text-dark:#1e293b;
+            --text-light:#64748b;
+            --accent-blue:#caf0f8;
+            --danger:#ef4444;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Plus Jakarta Sans',sans-serif;
+            background:var(--main-bg);
+            display:flex;
+            min-height:100vh;
+        }
+
+
+        .sidebar{
+            width:280px;height:100vh;position:fixed;background:#fff;
+            padding:30px 20px;display:flex;flex-direction:column;border-right:1px solid #eee;
+        }
+        .admin-brand{font-size:22px;font-weight:800;margin-bottom:30px;color:#023e8a;}
+        .nav-links{display:flex;flex-direction:column;gap:10px;flex:1;}
+        .nav-item{
+            display:flex;align-items:center;gap:12px;padding:12px 14px;
+            border-radius:12px;text-decoration:none;color:#64748b;font-weight:600;transition:0.3s;
+        }
+        .nav-item:hover{background:#f1f5f9;color:#023e8a;}
+        .nav-item.active{background:#caf0f8;color:#023e8a;}
+
+
+        .logout-section{
+            margin-top:auto;
+        }
+
+        .logout{
+            color:#ef4444;
+        }
+
+        .logout:hover{
+            background:#fee2e2;
+        }
+
+
+        .main{margin-left:280px;width:calc(100% - 280px);padding:40px;}
+        .content-container{background:white;padding:30px;border-radius:20px;}
+
+
+        table{width:100%;border-collapse:separate;border-spacing:0 10px;}
+        th{text-align:left;color:var(--text-light);font-size:13px;padding:10px;}
+        td{background:#f8fafc;padding:15px;}
+        .dest-img{width:60px;height:45px;border-radius:8px;object-fit:cover;}
+
+
+        .modal{
+            display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,0.4);justify-content:center;align-items:center;
+            z-index: 1000;
+        }
+        .modal-content{background:white;padding:25px;border-radius:15px;width:450px;}
+        .form-group{margin-bottom:15px;}
+        input, textarea{
+            width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;
+            font-family: inherit;
+        }
+        .btn-add{
+            background:var(--primary-dark);color:white;padding:10px 20px;
+            border:none;border-radius:10px;cursor:pointer;font-weight:600;
+        }
+        .btn-save{
+            background:var(--primary-dark);color:white;padding:12px;
+            border:none;width:100%;border-radius:10px;cursor:pointer;font-weight:600;
+        }
+
+        .action-btns{display:flex;gap:10px;}
+        .delete-btn{background:#fee2e2;color:#ef4444;border:none;padding:8px;border-radius:8px;cursor:pointer;}
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="admin-brand">SmartTraveler</div>
+    <div class="nav-links">
+        <a href="adminDashboard.html" class="nav-item "><i class="fas fa-chart-pie"></i> Overview</a>
+        <a class="nav-item" href="userManagement.html"><i class="fas fa-users"></i> Users</a>
+        <a class="nav-item active" href="#"><i class="fas fa-map-marked-alt"></i> Destinations</a>
+        <a href="HotelManagement.html" class="nav-item"><i class="fas fa-hotel"></i> Hotels</a>
+        <a href="#" class="nav-item"><i class="fas fa-walking"></i> Activities</a>
+        <a href="#" class="nav-item"><i class="fas fa-receipt"></i> Bookings</a>
+        <div class="logout-section">
+            <a href="adminDashboard.html" class="nav-item logout">
+                <i class="fas fa-power-off"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+    <div class="content-container">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h2>Destinations Management</h2>
+            <button class="btn-add" onclick="toggleModal('destModal', true)">+ Add Destination</button>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="destTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal" id="destModal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Add Destination</h3><br>
+
+        <div class="form-group">
+            <input type="text" id="destName" placeholder="Destination Name">
+        </div>
+
+        <div class="form-group">
+            <textarea id="destDesc" placeholder="Description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <input type="text" id="destImg" placeholder="Image URL (e.g. https://...)">
+        </div>
+
+        <button class="btn-save" onclick="saveDestination()">Save Destination</button>
+        <button style="margin-top:10px; background:none; border:none; width:100%; cursor:pointer; color:var(--text-light);"
+                onclick="toggleModal('destModal', false)">Cancel</button>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:8080/api/v1/destination";
+
+    /* 1. LOAD DESTINATIONS */
+    async function loadDestinations() {
+        try {
+            const res = await fetch(`${API_URL}/getAll`);
+            const result = await res.json();
+            const destinations = result.data;
+
+            const table = document.getElementById("destTableBody");
+            table.innerHTML = "";
+
+            if (!destinations || destinations.length === 0) {
+                table.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No destinations found.</td></tr>";
+                return;
+            }
+
+            destinations.forEach(dest => {
+                table.innerHTML += `
+                    <tr>
+                        <td><img src="${dest.image}" class="dest-img" onerror="this.src='https://via.placeholder.com/60x45?text=No+Img'"></td>
+                        <td><strong>${dest.name}</strong></td>
+                        <td style="color:var(--text-light); font-size:14px;">${dest.description.substring(0, 60)}...</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="delete-btn" onclick="deleteDestination(${dest.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+
+    async function saveDestination() {
+        const name = document.getElementById("destName").value;
+        const description = document.getElementById("destDesc").value;
+        const image = document.getElementById("destImg").value;
+
+        if (!name || !description) {
+            alert("Name and Description are required!");
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, description, image })
+            });
+
+            if (response.ok) {
+                alert("Destination saved successfully!");
+                toggleModal('destModal', false);
+                // Clear fields
+                document.getElementById("destName").value = "";
+                document.getElementById("destDesc").value = "";
+                document.getElementById("destImg").value = "";
+
+                loadDestinations();
+            }
+        } catch (error) {
+            console.error("Error saving:", error);
+        }
+    }
+
+
+
+    async function deleteDestination(id) {
+        if (!confirm("Are you sure?")) return;
+        try {
+            const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+            if (res.ok) {
+                loadDestinations();
+            }
+        } catch (error) {
+            console.error("Error deleting:", error);
+        }
+    }
+
+    function toggleModal(id, show) {
+        document.getElementById(id).style.display = show ? "flex" : "none";
+    }
+
+    // Initial Load
+    window.onload = loadDestinations;
+</script>
+
+</body>
+</html>

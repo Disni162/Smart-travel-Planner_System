@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartTraveler | Discover Activities</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --sl-green: #2D5A27;
+      --sl-gold: #13e4db;
+      --dark-blue: #0f172a;
+      --soft-white: #f8fafc;
+      --logout-red: #e11d48;
+      --glass: rgba(255, 255, 255, 0.15);
+      --text-light: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background-color: var(--soft-white); overflow-x: hidden; color: #334155; scroll-behavior: smooth; }
+
+    /* --- NAVIGATION --- */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 15px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-left { display: flex; align-items: center; gap: 15px; }
+    .btn-back { color: white; background: rgba(255, 255, 255, 0.15); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none; }
+    .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; }
+    .logo span { color: var(--sl-gold); }
+
+    .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
+    .nav-links a { text-decoration: none; color: white; font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+    .nav-links a:hover { color: var(--sl-gold); }
+
+    .btn-logout { background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: white; text-decoration: none; }
+    .btn-logout:hover { background: var(--logout-red); }
+
+    .menu-toggle { display: none; color: white; font-size: 24px; cursor: pointer; }
+
+    /* --- HERO --- */
+    .hero {
+      height: 50vh;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://visament.com/editor_image/mceu_58379801541743673215213_1743673339.webp') center/cover;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 80px 20px 0;
+    }
+
+    .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; margin-bottom: 20px; }
+
+    .search-wrapper {
+      width: 100%; max-width: 550px; background: var(--glass); backdrop-filter: blur(10px);
+      padding: 5px 15px; border-radius: 50px; display: flex; align-items: center; border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .search-wrapper input { flex: 1; background: transparent; border: none; outline: none; padding: 12px; color: white; font-size: 16px; }
+    .search-wrapper i { color: var(--sl-gold); }
+
+    /* --- GRID --- */
+    .section { padding: 50px 8%; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+
+    /* --- ACTIVITY CARD --- */
+    .card {
+      background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      display: flex; flex-direction: column; transition: 0.3s; border: 1px solid #f1f5f9;
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+    .card-img-container { position: relative; height: 200px; }
+    .card-img { width: 100%; height: 100%; object-fit: cover; }
+    .type-badge { position: absolute; top: 15px; left: 15px; background: var(--sl-gold); color: var(--dark-blue); padding: 5px 12px; border-radius: 50px; font-size: 10px; font-weight: 800; }
+    .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+    .card-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .card-body h3 { font-size: 18px; color: var(--dark-blue); }
+    .price-tag { color: var(--sl-green); font-weight: 800; }
+    .meta-info { display: flex; gap: 12px; margin-bottom: 15px; font-size: 12px; color: var(--text-light); }
+    .description { font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 20px; }
+    .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-plan, .btn-book { padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 12px; text-align: center; transition: 0.3s; }
+    .btn-plan { background: #f1f5f9; color: var(--dark-blue); }
+    .btn-book { background: var(--dark-blue); color: white; }
+    .btn-book:hover { background: var(--sl-green); }
+
+    /* --- RESPONSIVE QUERIES --- */
+    @media (max-width: 992px) {
+      nav { padding: 15px 5%; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        position: fixed; top: 70px; left: -100%; width: 100%; height: calc(100vh - 70px);
+        background: var(--dark-blue); flex-direction: column; padding: 40px; transition: 0.4s;
+      }
+      .nav-links.active { left: 0; }
+    }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .card-actions { grid-template-columns: 1fr; }
+      .hero { height: 40vh; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="homepage.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+    <a href="#" class="logo">Smart<span>Traveler</span></a>
+  </div>
+
+  <div class="menu-toggle" id="mobile-menu">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <ul class="nav-links" id="nav-list">
+    <li><a href="about.html">About</a></li>
+    <li><a href="hotel.html">Hotels</a></li>
+    <li><a href="destinations.html">Destinations</a></li>
+    <li><a href="#">Activity</a></li>
+    <li><a href="tripPlanner.html">Trip Builder</a></li>
+    <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <h1>✨ Experience Adventure</h1>
+  <div class="search-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" id="actSearch" placeholder="Search activities..." onkeyup="filterActivities()">
+  </div>
+</section>
+
+<main class="section">
+  <div class="grid" id="activityContainer"></div>
+  <div id="noResults" style="display: none; text-align: center; padding: 80px 20px;">
+    <i class="fas fa-search-location fa-4x" style="color: #cbd5e1; margin-bottom: 20px;"></i>
+    <h3 style="color: var(--text-light)">No activities found.</h3>
+  </div>
+</main>
+
+<footer>
+  <p style="text-align: center; padding: 40px; background: var(--dark-blue); color: white;">
+    &copy; 2026 SmartTraveler. Curating the best of Sri Lanka.
+  </p>
+</footer>
+
+<script>
+  // Navigation Toggle
+  const menuBtn = document.getElementById('mobile-menu');
+  const navList = document.getElementById('nav-list');
+
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+    const icon = menuBtn.querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+
+  // Data Loading
+  let allActivities = [];
+
+  async function loadActivities() {
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/activities");
+      allActivities = await res.json();
+      displayActivities(allActivities);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  function displayActivities(data) {
+    const container = document.getElementById("activityContainer");
+    const noResults = document.getElementById("noResults");
+    container.innerHTML = "";
+
+    if (!data || data.length === 0) {
+      noResults.style.display = "block";
+      return;
+    }
+    noResults.style.display = "none";
+
+    data.forEach(act => {
+      const imgUrl = act.image && act.image.startsWith('http') ? act.image : (act.image ? 'http://localhost:8080/' + act.image : 'https://via.placeholder.com/400x250');
+
+      const cardHtml = `
+        <div class="card">
+          <div class="card-img-container">
+            <span class="type-badge">${act.type || 'Activity'}</span>
+            <img src="${imgUrl}" class="card-img" onerror="this.src='https://via.placeholder.com/400x250'">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <h3>${act.name}</h3>
+              <div class="price-tag">LKR ${act.price}</div>
+            </div>
+            <div class="meta-info">
+              <span><i class="fas fa-map-marker-alt"></i> ${act.destinationName || 'Sri Lanka'}</span>
+              <span><i class="far fa-clock"></i> ${act.duration}h</span>
+            </div>
+            <p class="description">${act.description ? act.description.substring(0, 80) + '...' : 'Amazing experience in Sri Lanka.'}</p>
+            <div class="card-actions">
+              <a href="tripPlanner.html?id=${act.id}" class="btn-plan">Add Trip</a>
+              <a href="Booking.html?id=${act.id}" class="btn-book">Book Now</a>
+            </div>
+          </div>
+        </div>`;
+      container.insertAdjacentHTML("beforeend", cardHtml);
+    });
+  }
+
+  function filterActivities() {
+    const search = document.getElementById("actSearch").value.toLowerCase();
+    const filtered = allActivities.filter(a =>
+            a.name.toLowerCase().includes(search) ||
+            (a.type && a.type.toLowerCase().includes(search))
+    );
+    displayActivities(filtered);
+  }
+
+  window.onload = loadActivities;
+</script>
+
+</body>
+</html>

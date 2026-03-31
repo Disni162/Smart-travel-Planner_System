@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Galle | SmartTraveler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --luxury: #0f172a; --accent: #13e4db; --bg-body: #f8fafc; --white: #ffffff; --sl-gold: #13e4db; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--luxury); line-height: 1.6; }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .btn-back { color: white; background: rgba(255, 255, 255, 0.15); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); text-decoration: none; }
+        .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; }
+        .logo span { color: var(--sl-gold); }
+
+        .nav-links { display: flex; flex-wrap: wrap;list-style: none; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: white; font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--sl-gold); }
+
+        .btn-logout { background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: white !important;}
+        .btn-logout:hover { background: var(--logout-red) !important; transform: translateY(-2px); }
+
+
+        .hero { height: 400px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('https://do6raq9h04ex.cloudfront.net/sites/8/2021/07/galle-fort-1050x700-1.jpg') center/cover; display: flex; align-items: center; justify-content: center; color: white; }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; text-align: center; }
+
+        .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 20px; }
+        h2 { font-size: 1.6rem; font-weight: 800; margin: 50px 0 25px; display: flex; align-items: center; gap: 15px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
+        .card { background: var(--white); border-radius: 25px; overflow: hidden; transition: 0.3s; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card-img { height: 220px; width: 100%; object-fit: cover; }
+        .card-info { padding: 25px; flex-grow: 1; }
+
+        .price-label { font-size: 1.1rem; font-weight: 800; color: var(--luxury); margin-bottom: 15px; display: block; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .btn { display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; transition: 0.3s; cursor: pointer; font-size: 0.9rem; border: none; }
+        .btn-direct { background: var(--luxury); color: white; }
+        .btn-outline { background: transparent; border: 2px solid var(--luxury); color: var(--luxury); }
+
+        .grid {
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+
+            .menu-toggle {
+                display: block !important;
+                cursor: pointer;
+                z-index: 2100;
+            }
+
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                background: #0f172a;
+                flex-direction: column;
+                padding: 80px 40px;
+                transition: 0.4s ease-in-out;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+            }
+
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="mainNav">
+    <div class="nav-left">
+        <a href="destinations.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+        <a href="#" class="logo">Smart<span>Traveler</span></a>
+    </div>
+    <div class="menu-toggle" id="mobile-menu" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </div>
+    <ul id="nav-list" class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="hotel.html">Hotels</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="activity.html">Activity</a></li>
+        <li><a href="tripPlanner.html">Trip Builder</a></li>
+        <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>Galle Experience</h1>
+</section>
+
+<div class="container">
+    <h2><i class="fas fa-hotel"></i> Premium Stays</h2>
+    <div class="grid" id="galleHotelContainer">
+    </div>
+
+    <h2><i class="fas fa-hiking"></i> Must-Do Activities</h2>
+    <div class="grid" id="galleActivityContainer">
+    </div>
+</div>
+
+<script>
+    const menuBtn = document.getElementById('mobile-menu');
+    const navList = document.getElementById('nav-list');
+
+    if (menuBtn && navList) {
+        menuBtn.addEventListener('click', () => {
+
+            navList.classList.toggle('active');
+
+
+            const icon = menuBtn.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            }
+        });
+    }
+
+    async function loadGalleData() {
+        try {
+
+            const res = await fetch("http://localhost:8080/api/v1/galle");
+            const data = await res.json();
+            displayGalleItems(data);
+        } catch (error) {
+            console.error("Error fetching Galle data:", error);
+        }
+    }
+
+
+    function displayGalleItems(items) {
+        const hotelContainer = document.getElementById("galleHotelContainer");
+        const activityContainer = document.getElementById("galleActivityContainer");
+
+        hotelContainer.innerHTML = "";
+        activityContainer.innerHTML = "";
+
+        items.forEach(item => {
+            const cardHTML = `
+                <div class="card">
+                    <img src="${item.image}" class="card-img" alt="${item.name}">
+                    <div class="card-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <span class="price-label">Rs. ${item.pricePerNight.toLocaleString()} / ${item.type === 'Hotel' ? 'Night' : 'Person'}</span>
+                        <div class="btn-group">
+                            <button onclick="directBook('${item.name}', ${item.pricePerNight}, '${item.type}')" class="btn btn-direct">
+                                Book & Pay Now
+                            </button>
+                            <a href="tripPlanner.html?add=${item.id}" class="btn btn-outline">Add to Trip Planner</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (item.type === "Hotel") {
+                hotelContainer.insertAdjacentHTML("beforeend", cardHTML);
+            } else {
+                activityContainer.insertAdjacentHTML("beforeend", cardHTML);
+            }
+        });
+    }
+
+    // 3. BOOKING LOGIC
+    function directBook(name, price, type) {
+        const tempTrip = {
+            destName: name,
+            days: 1,
+            stayType: type,
+            cost: price
+        };
+        localStorage.setItem('tempTrip', JSON.stringify(tempTrip));
+        window.location.href = "Booking.html";
+    }
+
+    window.onload = loadGalleData;
+</script>
+</body>
+</html>

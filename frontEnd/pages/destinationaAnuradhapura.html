@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Anuradhapura | Ancient Kingdom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6b705c; /* Heritage Olive */
+      --accent: #d4a373;  /* Sandstone Gold */
+      --dark: #2b2d42;
+      --white: #ffffff;
+      --sl-gold: #13e4db;
+      --logout-red: #e11d48;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: var(--dark);
+    }
+
+    /* --- FIXED NAVIGATION BAR --- */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 15px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 2000;
+      background: rgba(8, 28, 21, 0.4);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-left { display: flex; align-items: center; gap: 20px; }
+
+    .btn-back {
+      color: white;
+      text-decoration: none;
+      background: rgba(255,255,255,0.15);
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-back:hover { background: var(--white); color: var(--primary); transform: translateX(-5px); }
+
+    .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; letter-spacing: -1px; }
+    .logo span { color: var(--sl-gold); }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover:not(.btn-logout) { color: var(--sl-gold); }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white !important;
+    }
+
+    .btn-logout:hover {
+      background: var(--logout-red) !important;
+      border-color: var(--logout-red);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(225, 29, 72, 0.4);
+    }
+
+    /* --- HERO SECTION --- */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 550px;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+      url('https://www.lovesrilanka.org/wp-content/uploads/2020/04/LS_TissaWewa_C1_800x520.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hero-overlay {
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      width: 100%;
+      padding: 80px 8%;
+      color: white;
+    }
+
+    .hero-overlay h1 { font-size: 4rem; margin: 0; font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+
+    /* --- CONTENT --- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+
+    .description-box {
+      background: var(--white);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      margin-bottom: 60px;
+      line-height: 1.8;
+      border-left: 10px solid var(--primary);
+    }
+
+    h2 { font-size: 2rem; margin-bottom: 30px; font-weight: 700; color: var(--dark); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      transition: 0.4s ease;
+      border: 1px solid #eee;
+    }
+
+    .card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+    .card-img-container { width: 100%; height: 200px; overflow: hidden; }
+    .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+    .card:hover img { transform: scale(1.1); }
+    .card-info { padding: 25px; }
+    .rating { color: #ffb703; font-weight: bold; }
+
+    /* --- CTA --- */
+    .cta-container { text-align: center; padding-bottom: 40px; }
+    .plan-btn {
+      background: linear-gradient(135deg, var(--primary), var(--dark));
+      color: white;
+      padding: 18px 45px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: 0.3s;
+      box-shadow: 0 8px 20px rgba(107, 112, 92, 0.3);
+    }
+    .plan-btn:hover { transform: scale(1.05); box-shadow: 0 12px 25px rgba(107, 112, 92, 0.5); }
+
+    .grid {
+      display: grid;
+
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 992px) {
+
+      .menu-toggle {
+        display: block !important;
+        cursor: pointer;
+        z-index: 2100;
+      }
+
+
+      .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background: #0f172a;
+        flex-direction: column;
+        padding: 80px 40px;
+        transition: 0.4s ease-in-out;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+      }
+
+
+      .nav-links.active {
+        left: 0;
+      }
+
+      .nav-links li {
+        margin: 15px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="homepage.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+    <a href="#" class="logo">Smart<span>Traveler</span></a>
+  </div>
+  <div class="menu-toggle" id="mobile-menu" style="display: none;">
+    <i class="fas fa-bars"></i>
+  </div>
+  <ul id="nav-list" class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="hotel.html">Hotels</a></li>
+    <li><a href="destinations.html">Destinations</a></li>
+    <li><a href="activity.html">Activity</a></li>
+    <li><a href="tripPlanner.html">Trip Builder</a></li>
+    <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+  </ul>
+</nav>
+<div class="hero">
+  <div class="hero-overlay">
+    <h1>Explore Anuradhapura</h1>
+    <p style="font-size: 1.3rem; opacity: 0.9;">The sacred ancient kingdom of Sri Lanka</p>
+  </div>
+</div>
+
+<div class="container">
+  <section class="description-box">
+    <h2>About the Destination</h2>
+    <p>Discover the roots of Sri Lankan civilization in Anuradhapura. As a UNESCO World Heritage site, it is home to massive stupas, ancient monasteries, and sacred ruins that span over 1,300 years of history. A place of spiritual peace and architectural wonder.</p>
+  </section>
+
+  <h2>Available Hotels</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-img-container">
+        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max500/190887506.jpg?k=161886ca3437d3bfb8916299b10558ae86fb80cdc57c7f59fd9f00d5c7736315&o=" alt="Ulagalla">
+      </div>
+      <div class="card-info">
+        <span style="background: #ffd700; color: #000; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold;">LUXURY</span>
+        <h3>Ulagalla by Uga Escapes</h3>
+        <p class="rating">⭐ 4.9</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-container">
+        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/420502717.jpg?k=75e18a34c28d57d75144060608004915b714311f12134bd1ddede0bce3e4ef4c&o=" alt="Sanctuary">
+      </div>
+      <div class="card-info">
+        <span style="background: #8d99ae; color: #fff; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold;">STANDARD</span>
+        <h3>The Sanctuary at Tissawewa</h3>
+        <p class="rating">⭐ 4.4</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-container">
+        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/519528722.jpg?k=f9151776acb25844653770b65a2bfe55fda55cbf0d3bdbaf96a880fb0ea5bbce&o=" alt="Lake View">
+      </div>
+      <div class="card-info">
+        <span style="background: #e76f51; color: #fff; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold;">BUDGET</span>
+        <h3>Lake View Guest House</h3>
+        <p class="rating">⭐ 4.2</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Popular Activities</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-img-container">
+        <img src="https://trailoka.com/wp-content/uploads/2022/02/Mirisawetiya_Vihara_3-min.jpg" alt="Atamasthana">
+      </div>
+      <div class="card-info">
+        <h3>Atamasthana Visit</h3>
+        <p>Sacred • 8 Locations</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img-container">
+        <img src="https://cdn.getyourguide.com/img/tour/61dff6ad5df11.jpeg/98.jpg" alt="Mihintale">
+      </div>
+      <div class="card-info">
+        <h3>Mihintale Sunset Hike</h3>
+        <p>Spiritual • History</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img-container">
+        <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/19/eb/63.jpg" alt="Cycling">
+      </div>
+      <div class="card-info">
+        <h3>Cycling Ancient Ruins</h3>
+        <p>Explore • Half Day</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-container">
+    <button class="plan-btn" onclick="alert('Planning your Anuradhapura pilgrimage...')">☸️ Plan My Trip Now</button>
+  </div>
+</div>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu');
+  const navList = document.getElementById('nav-list');
+
+  if (menuBtn && navList) {
+    menuBtn.addEventListener('click', () => {
+      // Menu එක එළියට ගැනීම සහ ඇතුළට යැවීම
+      navList.classList.toggle('active');
+
+      // Icon එක මාරු කිරීම (Bars සිට Times/X දක්වා)
+      const icon = menuBtn.querySelector('i');
+      if (icon) {
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+      }
+    });
+  }
+  const menuBtn = document.getElementById('mobile-menu');
+  const navList = document.getElementById('nav-list');
+
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+    const icon = menuBtn.querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+  document.querySelector('.btn-logout').addEventListener('click', function(e) {
+    e.preventDefault();
+    if(confirm('Are you sure you want to logout?')) {
+      window.location.href = 'login.html';
+    }
+  });
+</script>
+
+</body>
+</html>

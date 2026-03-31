@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTraveler | Blue Modular Trip Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0077b6;
+            --secondary-blue: #00b4d8;
+            --light-blue: #caf0f8;
+            --white: #ffffff;
+            --dark-blue: #03045e;
+            --glass: rgba(255, 255, 255, 0.15);
+            --logout-red: #e63946;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(3, 4, 94, 0.5), rgba(3, 4, 94, 0.5)),
+            url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            min-height: 100vh;
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* --- Glassmorphism Navbar --- */
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            color: var(--white);
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--white);
+            color: var(--dark-blue);
+        }
+
+        .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; letter-spacing: -1px; }
+        .logo span { color: #13e4db; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 400;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light-blue);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: var(--logout-red);
+            border-color: var(--logout-red);
+            transform: translateY(-2px);
+        }
+
+        /* --- Main Content --- */
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 110px auto 50px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        /* --- Trip Builder Card --- */
+        .builder-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 35px;
+            padding: 45px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--light-blue);
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group { margin-bottom: 35px; }
+
+        select {
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--dark-blue);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* --- Option Grids --- */
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .option-item { position: relative; }
+
+        .option-item input {
+            position: absolute;
+            opacity: 0;
+            width: 0; height: 0;
+        }
+
+        .option-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 22px 10px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-box i { font-size: 1.5rem; color: var(--light-blue); transition: 0.3s; }
+        .option-box span { font-weight: 500; font-size: 0.9rem; }
+
+        .option-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--white);
+        }
+
+        .option-item input:checked + .option-box {
+            background: var(--white);
+            color: var(--dark-blue);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .option-item input:checked + .option-box i {
+            color: var(--primary-blue);
+            transform: scale(1.1);
+        }
+
+        /* --- Generate Button --- */
+        .generate-btn {
+            width: 100%;
+            background: var(--white);
+            color: var(--dark-blue);
+            padding: 22px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .generate-btn:hover {
+            background: var(--light-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive Settings */
+        @media (max-width: 700px) {
+            nav { padding: 12px 20px; }
+            .nav-links { display: none; }
+            .option-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2rem; }
+            .builder-card { padding: 30px 20px; }
+            .logout-btn span { display: none; }
+            .logout-btn { padding: 10px; border-radius: 50%; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-left">
+        <a href="javascript:history.back()" class="back-btn" title="Back">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="#" class="logo">  <i class="fas fa-route"></i> Smart<span>Traveler</span></a>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="hotel.html">Hotels</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="activity.html">Activity</a></li>
+        <li><a href="tripPlanner.html">Trip Builder</a></li>
+<!--        <li><a href="#">Booking</a></li>-->
+        
+    </ul>
+
+    <div class="nav-right">
+        <a href="#" class="logout-btn">
+            <i class="fas fa-power-off"></i> <span>Logout</span>
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="header">
+        <h1>Plan Your Adventure</h1>
+        <p>Customize every detail of your Sri Lankan getaway.</p>
+    </div>
+
+    <div class="builder-card">
+        <div class="form-group">
+            <label class="section-title"><i class="fas fa-location-dot"></i> Destination</label>
+            <select id="dest-select">
+                <option>Sigiriya - The Lion Rock Fortress</option>
+                <option>Ella - Little Adam's Peak & Nine Arch</option>
+                <option>Kandy - Temple of the Tooth</option>
+                <option>Mirissa - Whale Watching & Beach</option>
+                <option>Nuwara Eliya - Little England</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="section-title"><i class="fas fa-hotel"></i> Stay Type</label>
+            <div class="option-grid">
+                <label class="option-item">
+                    <input type="radio" name="stay" value="budget" checked>
+                    <div class="option-box"><i class="fas fa-wallet"></i><span>Budget</span></div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="stay" value="standard">
+                    <div class="option-box"><i class="fas fa-star"></i><span>Standard</span></div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="stay" value="luxury">
+                    <div class="option-box"><i class="fas fa-crown"></i><span>Luxury</span></div>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="section-title"><i class="fas fa-compass"></i> Experience Mode</label>
+            <div class="option-grid">
+                <label class="option-item">
+                    <input type="radio" name="mode" value="adventure" checked>
+                    <div class="option-box"><i class="fas fa-mountain"></i><span>Adventure</span></div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="mode" value="relax">
+                    <div class="option-box"><i class="fas fa-spa"></i><span>Relax</span></div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="mode" value="cultural">
+                    <div class="option-box"><i class="fas fa-landmark"></i><span>Cultural</span></div>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="section-title"><i class="fas fa-calendar-days"></i> Duration</label>
+            <div class="option-grid">
+                <label class="option-item">
+                    <input type="radio" name="days" value="2" checked>
+                    <div class="option-box"><span>02 Days</span></div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="days" value="3">
+                    <div class="option-box"><span>03 Days</span></div>
+                </label>
+                <label class="option-item">
+                    <input type="radio" name="days" value="5">
+                    <div class="option-box"><span>05 Days</span></div>
+                </label>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="buildTrip()">
+            <i class="fas fa-wand-magic-sparkles"></i> Generate Full Itinerary
+        </button>
+
+    </div>
+</div>
+<div id="result-card" style="display: none; margin-top: 30px;" class="builder-card">
+    <h2 style="color: var(--light-blue); margin-bottom: 20px;"><i class="fas fa-clipboard-check"></i> Your Custom Itinerary</h2>
+    <div id="trip-details" style="line-height: 2;">
+    </div>
+    <div style="margin-top: 20px; font-size: 1.5rem; font-weight: 700;">
+        Total Estimated Cost: <span id="total-cost" style="color: #13e4db;">LKR 0.00</span>
+    </div>
+    <button class="generate-btn" style="background: var(--primary-blue); color: white; margin-top: 20px;" onclick="proceedToBooking()">
+        <i class="fas fa-check-circle"></i> Confirm & Book Now
+    </button>
+</div>
+<script>
+    function buildTrip() {
+        const dest = document.getElementById('dest-select').value;
+        const stay = document.querySelector('input[name="stay"]:checked').value;
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        const days = document.querySelector('input[name="days"]:checked').value;
+
+
+        alert(`Setting Up Your Trip! \n\nDestination: ${dest}\nDays: ${days}\nMode: ${mode}\nStyle: ${stay}`);
+    }
+    async function loadDestinations() {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/destinations');
+            const result = await response.json();
+            const select = document.getElementById('dest-select');
+
+            select.innerHTML = "";
+
+            result.data.forEach(dest => {
+                let option = document.createElement('option');
+                option.value = dest.id;
+                option.textContent = dest.name;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Error loading destinations:", error);
+        }
+    }
+
+
+    window.onload = loadDestinations;
+
+    async function buildTrip() {
+        const destSelect = document.getElementById('dest-select');
+        const destId = destSelect.value;
+
+
+        const destName = destSelect.options[destSelect.selectedIndex].text;
+
+        const stay = document.querySelector('input[name="stay"]:checked').value;
+        const days = parseInt(document.querySelector('input[name="days"]:checked').value);
+
+
+        let hotelPrice = stay === 'luxury' ? 25000 : stay === 'standard' ? 12000 : 5000;
+
+        //  Total Cost Calculation
+        const totalHotelCost = hotelPrice * days;
+        const activityBuffer = 5000;
+        const grandTotal = totalHotelCost + activityBuffer;
+
+        // update ui
+        document.getElementById('trip-details').innerHTML = `
+        <p><b>Destination:</b> ${destName}</p>
+        <p><b>Duration:</b> ${days} Days Plan</p>
+        <p><b>Accommodation:</b> ${stay.toUpperCase()} Class Hotel</p>
+    `;
+
+        document.getElementById('total-cost').innerText = `LKR ${grandTotal.toLocaleString()}`;
+
+        // Result card display
+        const resultCard = document.getElementById('result-card');
+        resultCard.style.display = 'block';
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+
+
+        const tripSummary = {
+            destId: destId,
+            destName: destName,
+            days: days,
+            cost: grandTotal,
+            stayType: stay
+        };
+        localStorage.setItem('tempTrip', JSON.stringify(tripSummary));
+    }
+
+    function proceedToBooking() {
+        window.location.href = "Booking.html";
+    }
+</script>
+</body>
+</html>

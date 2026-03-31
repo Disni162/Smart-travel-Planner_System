@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Mirissa | SmartTraveler</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --dark: #0f172a;
+            --accent: #13e4db;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --logout-red: #e11d48;
+            --sl-gold: #13e4db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .btn-back { color: white; background: rgba(255, 255, 255, 0.15); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); text-decoration: none; }
+        .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; }
+        .logo span { color: var(--sl-gold); }
+
+        .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: white; font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--sl-gold); }
+
+        .btn-logout { background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: white !important;}
+        .btn-logout:hover { background: var(--logout-red) !important; transform: translateY(-2px); }
+
+        /* HERO */
+        .hero {
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)),
+            url('https://tuktukrental.com/wp-content/uploads/2025/04/Sri-Lanka-3-1-1024x576.jpg') center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 { font-size: 3.5rem; font-weight: 800; }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: -50px auto 60px;
+            padding: 0 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            border-left: 6px solid var(--dark);
+        }
+
+        h2 { margin: 40px 0 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-info { padding: 20px; }
+        .card-info h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        .card-info p { font-size: 14px; color: #64748b; margin-bottom: 15px; line-height: 1.5; min-height: 45px;}
+
+        .price { font-weight: 800; margin-bottom: 15px; color: var(--dark); font-size: 1.1rem; }
+
+        /* BUTTONS */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-main { background: var(--dark); color: white; }
+        .btn-main:hover { background: #1e293b; }
+        .btn-outline { background: transparent; color: var(--dark); border: 2px solid var(--dark); margin-top: 10px; }
+        .btn-outline:hover { background: var(--dark); color: white; }
+
+        footer { text-align: center; padding: 40px; color: #64748b; font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            nav { padding: 12px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="mainNav">
+    <div class="nav-left">
+        <a href="destinations.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+        <a href="#" class="logo">Smart<span>Traveler</span></a>
+    </div>
+    <ul  id="nav-list" class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="hotel.html">Hotels</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="activity.html">Activity</a></li>
+        <li><a href="tripPlanner.html">Trip Builder</a></li>
+        <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>Explore Mirissa</h1>
+</section>
+
+<div class="container">
+    <div class="info-card">
+        <p>Mirissa is a dreamy beach destination on the southern coast of Sri Lanka. Famous for its crescent-shaped beach, whale watching excursions, and the iconic Coconut Tree Hill.</p>
+    </div>
+
+    <h2><i class="fas fa-hotel"></i> Premium Stays</h2>
+    <div class="grid" id="hotelContainer">
+    </div>
+
+    <h2><i class="fas fa-skating"></i> Popular Activities</h2>
+    <div class="grid" id="activityContainer">
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 SmartTraveler. Discover the beauty of Mirissa.</p>
+</footer>
+
+<script>
+
+    window.addEventListener('scroll', function() {
+        const nav = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+            nav.style.background = 'rgba(15, 23, 42, 0.95)';
+        } else {
+            nav.style.background = 'rgba(15, 23, 42, 0.4)';
+        }
+    });
+
+
+    const API_URL = "http://localhost:8080/api/v1/mirissa";
+
+    async function loadMirissaData() {
+        try {
+            const res = await fetch(API_URL);
+            if (!res.ok) throw new Error("Failed to fetch data");
+            const data = await res.json();
+            displayData(data);
+        } catch (err) {
+            console.error("Error loading Mirissa data:", err);
+
+        }
+    }
+
+    function displayData(items) {
+        const hotelContainer = document.getElementById("hotelContainer");
+        const activityContainer = document.getElementById("activityContainer");
+
+        hotelContainer.innerHTML = "";
+        activityContainer.innerHTML = "";
+
+        items.forEach(item => {
+            const card = `
+                <div class="card">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="card-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="price">Rs. ${item.pricePerNight.toLocaleString()} ${item.type === 'Hotel' ? '/ night' : '/ person'}</div>
+
+                        <button class="btn btn-main" onclick="bookNow('${item.name}', ${item.pricePerNight}, '${item.type}')">
+                            Book Now
+                        </button>
+
+                        <a href="tripPlanner.html?add=${item.id}" class="btn btn-outline">
+                            Add to Trip Builder
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            if (item.type === "Hotel") {
+                hotelContainer.innerHTML += card;
+            } else {
+                activityContainer.innerHTML += card;
+            }
+        });
+    }
+
+    function bookNow(name, price, type) {
+        const tempTrip = {
+            destName: name,
+            stayType: type,
+            cost: price
+        };
+        localStorage.setItem("tempTrip", JSON.stringify(tempTrip));
+        window.location.href = "Booking.html";
+    }
+
+    window.onload = loadMirissaData;
+</script>
+
+</body>
+</html>

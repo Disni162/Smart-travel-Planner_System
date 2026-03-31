@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTraveler Admin | User Management</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-dark:#023e8a;
+            --sidebar-bg:#fff;
+            --main-bg:#f0f5f9;
+            --text-dark:#1e293b;
+            --text-light:#64748b;
+            --accent-blue:#caf0f8;
+            --danger:#ef4444;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Plus Jakarta Sans',sans-serif;
+            background:var(--main-bg);
+            display:flex;
+            min-height:100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar{
+            width:280px;
+            height:100vh;
+            position:fixed;
+            background:#fff;
+            padding:30px 20px;
+            display:flex;
+            flex-direction:column;
+            border-right:1px solid #eee;
+        }
+
+        .admin-brand{
+            font-size:22px;
+            font-weight:800;
+            margin-bottom:30px;
+            color:#023e8a;
+        }
+
+        .nav-links{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            flex:1;
+        }
+
+        .nav-item{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:12px 14px;
+            border-radius:12px;
+            text-decoration:none;
+            color:#64748b;
+            font-weight:600;
+            transition:0.3s;
+        }
+
+        .nav-item:hover{
+            background:#f1f5f9;
+            color:#023e8a;
+        }
+
+        .nav-item.active{
+            background:#caf0f8;
+            color:#023e8a;
+        }
+
+        .logout-section{
+            margin-top:auto;
+        }
+
+        .logout{
+            color:#ef4444;
+        }
+
+        .logout:hover{
+            background:#fee2e2;
+        }
+
+
+        /* MAIN */
+        .main{
+            margin-left:280px;
+            width:calc(100% - 280px);
+            padding:40px;
+        }
+
+        .content-container{
+            background:white;
+            padding:30px;
+            border-radius:20px;
+        }
+
+
+        /* TABLE */
+        table{
+            width:100%;
+            border-collapse:separate;
+            border-spacing:0 10px;
+        }
+        th{
+            text-align:left;
+            color:var(--text-light);
+            font-size:13px;
+        }
+        td{
+            background:#f8fafc;
+            padding:15px;
+        }
+        .role-badge{
+            padding:5px 10px;
+            border-radius:8px;
+            font-size:12px;
+        }
+        .admin{background:#e0f2fe;color:#0369a1;}
+        .user{background:#dcfce7;color:#15803d;}
+
+        /* BUTTONS */
+        .action-btns{display:flex;gap:10px;color: #1f4fbf
+        }
+        .action-btn{
+            width:35px;
+            height:35px;
+            border:none;
+            cursor:pointer;
+            border-radius:8px;
+        }
+        .edit-btn{background:#e0f2fe;}
+        .delete-btn{background:#fee2e2;}
+
+        /* MODAL */
+        .modal{
+            display:none;
+            position:fixed;
+            top:0;left:0;
+            width:100%;height:100%;
+            background:rgba(0,0,0,0.4);
+            justify-content:center;
+            align-items:center;
+        }
+        .modal-content{
+            background:white;
+            padding:25px;
+            border-radius:15px;
+            width:400px;
+        }
+        .form-group{margin-bottom:15px;}
+        input,select{
+            width:100%;
+            padding:10px;
+            border:1px solid #ddd;
+            border-radius:10px;
+        }
+        .btn-save{
+            background:var(--primary-dark);
+            color:white;
+            padding:10px;
+            border:none;
+            width:100%;
+            border-radius:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="admin-brand">
+        SmartTraveler
+    </div>
+
+    <div class="nav-links">
+
+        <a href="adminDashboard.html" class="nav-item "><i class="fas fa-chart-pie"></i> Overview</a>
+        <a href="userManagement.html" class="nav-item active"><i class="fa-solid fa-users"></i> User Management</a>
+        <a href="DestinationManagement.html" class="nav-item"><i class="fas fa-map-marked-alt"></i> Destinations</a>
+        <a href="HotelManagement.html" class="nav-item "><i class="fas fa-hotel"></i> Hotels</a>
+        <a href="AdminActivity.html" class="nav-item"><i class="fas fa-walking"></i> Activities</a>
+        <a href="Booking.html" class="nav-item"><i class="fas fa-receipt"></i> Bookings</a>
+        <a href="index.html" class="nav-item logout"><i class="fas fa-power-off"></i> Logout</a>
+    </div>
+
+    <div class="logout-section">
+        <a href="#" class="nav-item logout">
+            <i class="fas fa-power-off"></i>
+            Logout
+        </a>
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+    <div class="top-nav">
+        <button class="btn-back" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Back
+
+        </button>
+
+
+
+    </div>
+    <br>
+<!--    <div class="content-container">-->
+
+<!--        <div style="display:flex;justify-content:space-between;margin-bottom:20px;">-->
+<!--            <h2>User Management</h2>-->
+<!--            <button onclick="toggleModal('addModal',true)">+ Add User</button>-->
+<!--        </div>-->
+
+        <table>
+            <thead>
+            <tr>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody id="userTableBody"></tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal" id="addModal">
+    <div class="modal-content">
+        <h3>Add User</h3>
+
+        <div class="form-group">
+            <input type="email" name="addEmail" placeholder="Email">
+        </div>
+
+        <div class="form-group">
+            <input type="password" name="addPassword" placeholder="Password">
+        </div>
+
+        <div class="form-group">
+            <select name="addRole">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+        </div>
+
+        <button class="btn-save" onclick="addUser()">Create</button>
+    </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <h3>Edit User</h3>
+
+        <div class="form-group">
+            <input type="email" name="editEmail">
+        </div>
+
+        <div class="form-group">
+            <select name="editRole">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+        </div>
+
+        <button class="btn-save" onclick="updateUser()">Update</button>
+    </div>
+</div>
+
+<script>
+
+    const API_URL = "http://localhost:8080/api/v1/user";
+
+
+    async function loadUsers() {
+        try {
+            const res = await fetch(`${API_URL}/getAll`);
+
+            // Response eka completeda kiyl check krnw
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
+            const result = await res.json();
+            console.log("Data received from backend:", result);
+
+
+            const users = result.data;
+            const table = document.getElementById("userTableBody");
+
+            // Table empty krnwa
+            table.innerHTML = "";
+
+            // data nathnm msg ekk enwa
+            if (!users || users.length === 0) {
+                table.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No users found.</td></tr>";
+                return;
+            }
+
+            users.forEach(user => {
+                // Role eka anuwa ui select krnwa
+                const roleClass = user.role === "ADMIN" ? "admin" : "user";
+
+
+
+                table.innerHTML += `
+                <tr>
+                    <td>${user.email}</td>
+                    <td><span class="role-badge ${roleClass}">${user.role}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn"
+                                onclick="openEdit(${user.id}, '${user.email}', '${user.role}')">
+                                ✏
+                            </button>
+
+                            <button class="action-btn delete-btn"
+                                onclick="deleteUser(${user.id})">
+                                🗑
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        } catch (error) {
+            console.error("Error loading users:", error);
+
+            document.getElementById("userTableBody").innerHTML =
+                `<tr><td colspan='3' style='color:red; text-align:center;'>Failed to load users. Check Console.</td></tr>`;
+        }
+    }
+    /* DELETE */
+    async function deleteUser(id){
+        if(!confirm("Delete user?")) return;
+
+        await fetch(`${API_URL}/${id}`,{method:"DELETE"});
+        loadUsers();
+    }
+
+    /* OPEN EDIT */
+    function openEdit(id,email,role){
+        window.userId = id;
+        document.querySelector("#editModal").style.display="flex";
+        document.querySelector("input[name='editEmail']").value=email;
+        document.querySelector("select[name='editRole']").value=role;
+    }
+
+    /* UPDATE */
+    async function updateUser(){
+        const role = document.querySelector("select[name='editRole']").value;
+
+        await fetch(`${API_URL}/${window.userId}?role=${role}`,{
+            method:"PUT"
+        });
+
+        toggleModal('editModal',false);
+        loadUsers();
+    }
+
+    async function addUser() {
+        const email = document.querySelector("input[name='addEmail']").value;
+        const password = document.querySelector("input[name='addPassword']").value;
+        const role = document.querySelector("select[name='addRole']").value;
+
+        if (!email || !password) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    confirmPassword: password,
+                    role: role
+                })
+            });
+
+            if (response.ok) {
+                alert("User added successfully!");
+                toggleModal('addModal', false);
+
+                // Form clear
+                document.querySelector("input[name='addEmail']").value = "";
+                document.querySelector("input[name='addPassword']").value = "";
+
+                //save unat passe table ek refresh krnwa
+                await loadUsers();
+            } else {
+                const errorData = await response.json();
+                alert("Error: " + (errorData.message || "Failed to add user"));
+            }
+        } catch (error) {
+            console.error("Error adding user:", error);
+            alert("Server connection failed!");
+        }
+    }
+
+
+    function toggleModal(id, show) {
+        document.getElementById(id).style.display = show ? "flex" : "none";
+    }
+
+
+    window.onload = loadUsers;
+
+    window.onclick = function(event) {
+        if (event.target.className === 'modal') {
+            event.target.style.display = "none";
+        }
+    }
+
+</script>
+
+</body>
+</html>

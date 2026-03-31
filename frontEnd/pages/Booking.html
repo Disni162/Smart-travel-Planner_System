@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTraveler | Confirm Your Booking</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        :root {
+            --primary-blue: #0077b6;
+            --secondary-blue: #00b4d8;
+            --light-blue: #caf0f8;
+            --white: #ffffff;
+            --dark-blue: #03045e;
+            --glass: rgba(255, 255, 255, 0.15);
+            --accent-cyan: #13e4db;
+            --error-red: #ff4d4d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .btn-back { color: white; background: rgba(255, 255, 255, 0.15); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); text-decoration: none; }
+        .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; }
+        .logo span { color: var(--sl-gold); }
+
+        .nav-links { display: flex; flex-wrap: wrap;list-style: none; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: white; font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--sl-gold); }
+
+        .btn-logout { background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; display: flex; align-items: center; gap: 8px; color: white !important;}
+        .btn-logout:hover { background: var(--logout-red) !important; transform: translateY(-2px); }
+
+        body {
+            background: linear-gradient(rgba(3, 4, 94, 0.6), rgba(3, 4, 94, 0.6)),
+            url('https://images.unsplash.com/photo-1473116763249-2faaef81ccda?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            min-height: 100vh;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .booking-container {
+            width: 100%;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border-radius: 40px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .summary-side {
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-side h2 { font-size: 2rem; margin-bottom: 25px; color: var(--accent-cyan); }
+
+        .trip-info-item { margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .trip-info-item label { font-size: 0.8rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
+        .trip-info-item p { font-size: 1.1rem; font-weight: 600; }
+
+        .total-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--white);
+            color: var(--dark-blue);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .form-side { padding: 50px; }
+
+        .input-group { margin-bottom: 15px; }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--dark-blue);
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background: var(--accent-cyan);
+            color: var(--dark-blue);
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* =========================
+           ✅ FIXED BOOKED STYLE
+        ========================= */
+        .flatpickr-day.booked-date {
+            background-color: #ff4d4d !important;
+            color: white !important;
+            border-radius: 50% !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+            opacity: 0.8;
+        }
+
+        .flatpickr-day.booked-date:hover::before {
+            content: "Booked";
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            background: black;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 800px) {
+            .booking-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+<nav id="mainNav">
+    <div class="nav-left">
+        <a href="homepage.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+        <a href="#" class="logo">Smart<span>Traveler</span></a>
+    </div>
+    <div class="menu-toggle" id="mobile-menu" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </div>
+    <ul id="nav-list" class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="hotel.html">Hotels</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="activity.html">Activity</a></li>
+        <li><a href="tripPlanner.html">Trip Builder</a></li>
+        <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+    </ul>
+</nav>
+<div class="booking-container">
+    <div class="summary-side">
+        <h2>Trip Summary</h2>
+
+        <div class="trip-info-item">
+            <label>Selected Destination</label>
+            <p id="sum-dest">Not Selected</p>
+        </div>
+
+        <div class="trip-info-item">
+            <label>Stay Type</label>
+            <p id="sum-stay">Standard</p>
+        </div>
+
+        <div class="total-box">
+            <span>Total Amount</span>
+            <h3 id="sum-total">LKR 0.00</h3>
+        </div>
+    </div>
+
+    <div class="form-side">
+        <h2>Booking Details</h2>
+
+        <form id="bookingForm">
+            <div class="input-group">
+                <label>Select Travel Date</label>
+                <input type="text" id="bookingDate" placeholder="Select booking dates">
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="userName" placeholder="Enter your name" required>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="userEmail" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="userPhone" placeholder="+94 7X XXX XXXX" required>
+            </div>
+
+            <button type="submit" class="confirm-btn">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let calendarInstance;
+
+    window.onload = function() {
+        const tripData = JSON.parse(localStorage.getItem('tempTrip'));
+
+        if (tripData) {
+            document.getElementById('sum-dest').innerText = tripData.destName;
+            document.getElementById('sum-stay').innerText = tripData.stayType.toUpperCase();
+            document.getElementById('sum-total').innerText = `LKR ${tripData.cost}`;
+
+            fetchBookedDates();
+        } else {
+            alert("No trip details found!");
+            window.location.href = "index.html";
+        }
+    };
+
+    function fetchBookedDates() {
+        const tripData = JSON.parse(localStorage.getItem('tempTrip'));
+        const destination = tripData.destName;
+
+
+        fetch(`http://localhost:8080/api/v1/bookings/dates/${destination}`)
+            .then(res => res.json())
+            .then(data => initCalendar(data))
+            .catch(err => {
+                console.log(err);
+                initCalendar([]);
+            });
+    }
+
+    function initCalendar(travelDateList) {
+
+        // 🔥 SAFE GUARD
+        if (!Array.isArray(travelDateList)) {
+            console.log("Invalid bookedDates:", travelDateList);
+            travelDateList = [];
+        }
+
+        flatpickr("#bookingDate", {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            disable: travelDateList,
+
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+
+                const dateObj = dayElem.dateObj;
+                const year = dateObj.getFullYear();
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const day = String(dateObj.getDate()).padStart(2, '0');
+
+                const localDateStr = `${year}-${month}-${day}`; //
+
+
+                if (travelDateList.includes(localDateStr)) {
+                    dayElem.classList.add("booked-date");
+                    dayElem.title = "Already Booked";
+                }
+            }
+        });
+    }
+
+    document.getElementById('bookingForm').onsubmit = async function(e) {
+        e.preventDefault();
+
+        const tripData = JSON.parse(localStorage.getItem('tempTrip'));
+        const selectedDate = document.getElementById('bookingDate').value;
+
+        if (!selectedDate) {
+            alert("Please select a travel date!");
+            return;
+        }
+
+        const bookingInfo = {
+            customerName: document.getElementById('userName').value,
+            customerEmail: document.getElementById('userEmail').value,
+            customerPhone: document.getElementById('userPhone').value,
+            destinationName: tripData.destName,
+            stayType: tripData.stayType,
+            durationDays: 1,
+            totalPrice: parseFloat(tripData.cost),
+
+
+            travelDate: document.getElementById('bookingDate').value,
+
+            status: "PENDING"
+        };
+
+        try {
+            const res = await fetch('http://localhost:8080/api/v1/bookings/confirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingInfo)
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem('lastBookingId', data.bookingId);
+                alert("Success!");
+                window.location.href = "payment.html";
+            } else {
+                alert("Booking failed!");
+            }
+        } catch (error) {
+            alert("Server error!");
+        }
+    };
+</script>
+
+</body>
+</html>

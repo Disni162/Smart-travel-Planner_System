@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTraveler | Secure Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #03045e;
+            --accent-cyan: #13e4db;
+            --glass: rgba(255, 255, 255, 0.1);
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(rgba(3, 4, 94, 0.7), rgba(3, 4, 94, 0.7)),
+            url('https://images.unsplash.com/photo-1556742044-3c52d6e88c62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+
+        .builder-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        h2 { margin-bottom: 20px; color: var(--accent-cyan); font-size: 1.8rem; }
+
+        p { margin-bottom: 30px; opacity: 0.9; font-size: 0.9rem; }
+
+        .form-group { text-align: left; margin-bottom: 20px; }
+
+        label { display: block; margin-bottom: 8px; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .pay-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-blue);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .pay-input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(19, 228, 219, 0.3); }
+
+        .confirm-btn {
+            width: 100%;
+            background: var(--accent-cyan);
+            color: var(--primary-blue);
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .confirm-btn:hover { background: var(--white); transform: translateY(-3px); }
+
+        .card-icons { font-size: 1.5rem; margin-bottom: 20px; display: flex; justify-content: center; gap: 15px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<div class="builder-card">
+    <div class="card-icons">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-amex"></i>
+    </div>
+
+    <h2>Secure Payment</h2>
+    <p>Complete your booking for <br><span id="pay-amount" style="color: var(--accent-cyan); font-size: 1.4rem; font-weight: 700;">LKR 0.00</span></p>
+
+    <div class="form-group">
+        <label>Card Number</label>
+        <input type="text" id="cardNum" placeholder="1234 5678 9101 1121" class="pay-input" maxlength="19">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+            <label>Expiry</label>
+            <input type="text" id="expiry" placeholder="MM/YY" class="pay-input" maxlength="5">
+        </div>
+        <div class="form-group">
+            <label>CVC</label>
+            <input type="password" id="cvc" placeholder="***" class="pay-input" maxlength="3">
+        </div>
+    </div>
+
+    <button onclick="processPayment()" class="confirm-btn">
+        <i class="fas fa-lock"></i> Pay Now
+    </button>
+</div>
+
+<script>
+
+    window.onload = function() {
+        const tripData = JSON.parse(localStorage.getItem('tempTrip'));
+        if (tripData && tripData.cost) {
+            document.getElementById('pay-amount').innerText = `LKR ${tripData.cost.toLocaleString()}`;
+        }
+    };
+
+
+    async function processPayment() {
+        const cardNum = document.getElementById('cardNum').value;
+        const bookingId = localStorage.getItem('lastBookingId'); // Backend එකෙන් ලැබුණු ID එක
+
+        if (!cardNum || cardNum.length < 16) {
+            alert("Please enter a valid card number!");
+            return;
+        }
+
+
+        const btn = document.querySelector('.confirm-btn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+
+        try {
+
+            const response = await fetch(`http://localhost:8080/api/v1/bookings/update-status/${bookingId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: "PAID" })
+            });
+
+            if (response.ok) {
+                alert(" Payment Successful! Your trip is confirmed.");
+                localStorage.removeItem('tempTrip');
+                localStorage.removeItem('lastBookingId');
+                window.location.href = "index.html";
+            } else {
+                alert("Payment Failed. Please try again.");
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay Now';
+                btn.disabled = false;
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Connection Error!");
+        }
+    }
+</script>
+
+</body>
+</html>

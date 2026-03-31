@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldUnite! - Providing Inspiration Abroad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #0077b6;
+            --secondary-blue: #00b4d8;
+            --light-blue: #caf0f8;
+            --white: #13e4db;
+            --dark-blue: #03045e;
+            --logout-red: #e63946;
+            --glass: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            color: #333;
+        }
+
+        /* --- Glassmorphism Navbar (Fixed) --- */
+        nav.main-nav {
+            background: rgba(0, 119, 182, 0.2); /* Transparent Blue */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            color: var(--white);
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--white);
+            color: var(--primary-blue);
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; letter-spacing: -1px; }
+        .logo span { color: #13e4db; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--light-blue); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: var(--logout-red);
+            border-color: var(--logout-red);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section Adjustments */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+            url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            color: white;
+            padding-top: 80px; /* Space for fixed nav */
+        }
+
+        .hero h2 { font-size: 60px; line-height: 1; margin-bottom: 10px; }
+        .hero .inspiration {
+            font-family: 'Great Vibes', cursive;
+            font-size: 80px;
+            color: rgba(255,255,255,0.9);
+            display: block;
+            margin: -20px 0;
+            text-transform: capitalize;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: white;
+            clip-path: polygon(0 80%, 15% 95%, 35% 85%, 55% 98%, 75% 88%, 100% 100%, 100% 100%, 0% 100%);
+        }
+
+        /* Sections */
+        .section-container { padding: 80px 5%; background: #fff; }
+        .row { display: flex; gap: 30px; align-items: center; }
+        .section-info { flex: 1; }
+        .section-info h3 { font-family: 'Great Vibes', cursive; font-size: 32px; color: var(--primary-blue); }
+        .section-info h4 { font-size: 24px; text-transform: uppercase; margin-bottom: 15px; }
+
+        /* Cards */
+        .cards-container { flex: 3; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .card { height: 300px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; transition: transform 0.3s; }
+        .card:hover { transform: translateY(-10px); }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-overlay { position: absolute; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
+        .card.active { background: var(--primary-blue); display: flex; flex-direction: column; justify-content: center; padding: 20px; text-align: center; color: white;}
+
+        .btn-more { display: inline-flex; align-items: center; gap: 10px; color: var(--primary-blue); text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; }
+        .btn-more i { background: var(--primary-blue); color: white; padding: 8px; border-radius: 50%; }
+
+
+
+        @media (max-width: 1024px) {
+            .hero h2 { font-size: 45px; }
+            .hero .inspiration { font-size: 60px; }
+            .cards-container { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: block !important; }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background: rgba(3, 4, 94, 0.95);
+                flex-direction: column;
+                padding: 40px;
+                transition: 0.4s;
+                text-align: center;
+                backdrop-filter: blur(10px);
+            }
+
+            .nav-links.active {
+                right: 0; /* Menu එක පෙන්වන්න */
+            }
+
+            .row { flex-direction: column; text-align: center; }
+            .section-info { margin-bottom: 30px; }
+            .cards-container { grid-template-columns: repeat(2, 1fr); width: 100%; }
+
+            .hero { padding: 0 5%; text-align: center; justify-content: center; }
+            .hero h2 { font-size: 35px; }
+            .hero .inspiration { font-size: 50px; }
+        }
+
+        @media (max-width: 500px) {
+            .cards-container { grid-template-columns: 1fr; }
+            .card { height: 250px; }
+            .logout-btn span { display: none; }
+            .hero h2 { font-size: 28px; }
+            .hero .inspiration { font-size: 40px; }
+        }
+
+        @media (max-width: 900px) {
+            .menu-toggle {
+                display: block !important;
+                cursor: pointer;
+                color: white;
+                font-size: 24px;
+                z-index: 1001;
+            }
+
+
+            .nav-links.active {
+                right: 0 !important;
+            }
+
+
+            .nav-right {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="main-nav">
+    <div class="nav-left">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="#" class="logo">  <i class="fas fa-route"></i> Smart<span>Traveler</span></a>
+    </div>
+    <div class="menu-toggle" id="mobile-menu" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </div>
+    <ul class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="hotel.html">Hotels</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="activity.html">Activity</a></li>
+        <li><a href="tripPlanner.html">Trip Builder</a></li>
+<!--        <li><a href="#">Booking</a></li>-->
+    </ul>
+
+    <div class="nav-right">
+        <a href="index.html" class="logout-btn">
+            <i class="fas fa-power-off"></i> <span>Logout</span>
+        </a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>PROVIDING</h2>
+        <span class="inspiration">Inspiration</span>
+        <h2>TO TRAVEL</h2>
+        <p>Giving you the opportunity to give back, learn and grow as you experience some of the most amazing places on earth.</p>
+    </div>
+</section>
+
+<section class="section-container">
+    <div class="row">
+        <div class="section-info">
+            <h3>Travel & Adventure</h3>
+            <h4>Explore Sri Lanka</h4>
+            <p>Discover the hidden gems of Sri Lanka! From stunning beaches, rich culture, to scenic hill country and wildlife adventures.</p>
+            <a href="#" class="btn-more"><i class="fas fa-arrow-right"></i> See All Destinations</a>
+        </div>
+
+        <div class="cards-container">
+            <div class="card active">
+                <h5 style="margin-bottom: 10px;">Sigiriya</h5>
+                <p style="font-size: 11px; margin-bottom: 15px;">Ancient rock fortress and UNESCO World Heritage site.</p>
+                <small>Top Attraction -></small>
+            </div>
+            <div class="card">
+                <img src="https://bmkltsly13vb.compat.objectstorage.ap-mumbai-1.oraclecloud.com/cdn.lw.lk/assets/uploads/image_1daa48b3c3.jpg" alt="South">
+                <div class="card-overlay">Down South</div>
+            </div>
+            <div class="card">
+                <img src="https://www.lovesrilanka.org/wp-content/uploads/2020/04/LS_Ella_Main_Mob_800x1000.jpg" alt="Ella">
+                <div class="card-overlay">Ella</div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80" alt="Kandy">
+                <div class="card-overlay">Kandy</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-container" style="padding-top: 0;">
+    <div class="row">
+        <div class="section-info">
+            <h3>Discover</h3>
+            <h4>Beautiful Sri Lanka</h4>
+            <p>Experience the best of Sri Lanka! From pristine beaches, cultural heritage sites, to lush hill country and wildlife safaris.</p>
+            <a href="#" class="btn-more"><i class="fas fa-arrow-right"></i> See All Destinations</a>
+        </div>
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://www.theglobetrottergp.com/wp-content/uploads/2019/05/oDZ1LpuSxCdJQd5UhbjSA_thumb_60bb.jpg" alt="Mirissa">
+                <div class="card-overlay">Mirissa</div>
+            </div>
+            <div class="card">
+                <img src="https://travelrebels.com/wp-content/uploads/2024/04/tips-voor-nuwara-eliya.jpg" alt="Nuwara Eliya">
+                <div class="card-overlay">Nuwara Eliya</div>
+            </div>
+            <div class="card">
+                <img src="https://www.lovesrilanka.org/wp-content/uploads/2019/09/LSL_Cropped_Galle_Lighthouse_800x520.jpg" alt="Galle">
+                <div class="card-overlay">Galle Fort</div>
+            </div>
+            <div class="card">
+                <img src="https://www.onthegotours.com/repository/Sigiriya-rock-fortress--Sri-Lanka--On-The-Go-Tours-624871522855026.jpg" alt="Sigiriya">
+                <div class="card-overlay">Sigiriya Rock</div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    mobileMenu.addEventListener('click', () => {
+
+        navLinks.classList.toggle('active');
+
+
+        const icon = mobileMenu.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+
+
+    window.onscroll = () => {
+        navLinks.classList.remove('active');
+        const icon = mobileMenu.querySelector('i');
+        icon.classList.add('fa-bars');
+        icon.classList.remove('fa-times');
+    };
+</script>
+</body>
+</html>

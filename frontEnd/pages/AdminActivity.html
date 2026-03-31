@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTraveler Admin | Activity Management</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-glow: #0077b6;
+            --primary-dark: #023e8a;
+            --sidebar-bg: #ffffff;
+            --main-bg: #f0f5f9;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --accent-blue: #caf0f8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --white: #ffffff;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--main-bg);
+            color: var(--text-dark);
+            display:flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width:280px;
+            background:var(--sidebar-bg);
+            border-right:1px solid rgba(0,0,0,0.05);
+            padding:40px 25px;
+            position:fixed;
+            height:100vh;
+        }
+
+        .admin-brand {
+            font-size:24px;
+            font-weight:800;
+            color:var(--primary-dark);
+            margin-bottom:50px;
+            display:flex;
+            gap:10px;
+        }
+
+        .nav-links {
+            display:flex;
+            flex-direction:column;
+        }
+
+        .nav-item {
+            display:flex;
+            gap:15px;
+            padding:14px;
+            border-radius:16px;
+            color:var(--text-light);
+            text-decoration:none;
+            font-weight:600;
+            margin-bottom:8px;
+            transition:0.3s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background:var(--accent-blue);
+            color:var(--primary-dark);
+        }
+
+        .nav-item.logout {
+            margin-top:auto;
+            color:var(--danger);
+        }
+
+        /* MAIN */
+        .main {
+            margin-left:280px;
+            padding:40px;
+            width:100%;
+        }
+
+        /* CARD */
+        .card {
+            background:var(--white);
+            padding:25px;
+            border-radius:20px;
+            margin-bottom:25px;
+        }
+
+        /* FORM */
+        .form-grid {
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:20px;
+        }
+
+        input, select, textarea {
+            width:100%;
+            padding:12px;
+            border:1px solid #ddd;
+            border-radius:10px;
+        }
+
+        .btn {
+            margin-top:10px;
+            padding:12px;
+            background:var(--primary-glow);
+            color:white;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+        }
+
+        /* TABLE */
+        table {
+            width:100%;
+            margin-top:15px;
+        }
+
+        th, td {
+            padding:15px;
+            text-align:left;
+        }
+
+        .img-preview {
+            width:45px;
+            height:45px;
+            border-radius:8px;
+        }
+
+        .delete-btn {
+            color:red;
+            border:none;
+            background:none;
+            cursor:pointer;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="admin-brand">
+        <i class="fas fa-paper-plane"></i>
+        SmartTraveler
+    </div>
+
+    <div class="nav-links">
+        <a href="adminDashboard.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i> Overview
+        </a>
+
+        <a href="userManagement.html" class="nav-item">
+            <i class="fa-solid fa-users"></i> User Management
+        </a>
+
+        <a href="DestinationManagement.html" class="nav-item">
+            <i class="fas fa-map-marked-alt"></i> Destinations
+        </a>
+
+        <a href="HotelManagement.html" class="nav-item">
+            <i class="fas fa-hotel"></i> Hotels
+        </a>
+
+        <a href="#" class="nav-item active">
+            <i class="fas fa-walking"></i> Activities
+        </a>
+
+        <a href="manage-bookings.html" class="nav-item">
+            <i class="fas fa-receipt"></i> Bookings
+        </a>
+
+        <a href="index.html" class="nav-item logout">
+            <i class="fas fa-power-off"></i> Logout
+        </a>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <h2>Activity Management</h2>
+
+    <div class="card">
+        <form id="activityForm">
+
+            <div class="form-grid">
+
+                <input id="actName" placeholder="Activity Name" required>
+
+                <select id="actType">
+                    <option>Adventure</option>
+                    <option>Relax</option>
+                    <option>Cultural</option>
+                </select>
+
+                <input type="number" id="actPrice" placeholder="Price" required>
+                <input type="number" id="actDuration" placeholder="Duration" required>
+
+                <select id="actDestination"></select>
+                <input id="actImage" placeholder="Image URL">
+
+                <textarea id="actDescription" placeholder="Description"></textarea>
+
+            </div>
+
+            <button class="btn">Save Activity</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody id="activityTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    const API = "http://localhost:8080/api/v1/activities";
+    const DEST = "http://localhost:8080/api/v1/destinations";
+
+    // Load Activities
+    async function loadActivities() {
+        try {
+            const res = await fetch(API);
+            const result = await res.json();
+            const data = result.data || result;
+
+            const table = document.getElementById("activityTable");
+            table.innerHTML = "";
+
+            data.forEach(a => {
+                table.innerHTML += `
+                    <tr>
+                        <td><img src="${a.image}" class="img-preview"></td>
+                        <td>${a.name}</td>
+                        <td>${a.type}</td>
+                        <td>LKR ${a.price}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteActivity(${a.id})">Delete</button>
+                        </td>
+                    </tr>`;
+            });
+
+        } catch (err) {
+            console.error("Load Activities Error:", err);
+        }
+    }
+
+    // Load Destinations
+    async function loadDest() {
+        try {
+            const res = await fetch(DEST);
+            const result = await res.json();
+            const data = result.data || result;
+
+            const select = document.getElementById("actDestination");
+            select.innerHTML = `<option value="">Select Destination</option>`;
+
+            data.forEach(d => {
+                select.innerHTML += `<option value="${d.id}">${d.name}</option>`;
+            });
+
+        } catch (err) {
+            console.error("Load Dest Error:", err);
+        }
+    }
+
+
+    document.getElementById("activityForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const destinationId = actDestination.value;
+
+
+        if (!destinationId) {
+            alert("Please select destination");
+            return;
+        }
+
+        const obj = {
+            name: actName.value,
+            description: actDescription.value,
+            image: actImage.value,
+            destinationId: parseInt(destinationId),
+            price: parseFloat(actPrice.value),
+            duration: parseInt(actDuration.value),
+            type: actType.value
+        };
+
+        console.log("Sending:", obj);
+
+        try {
+            const res = await fetch(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(obj)
+            });
+
+            if (res.ok) {
+                alert("Activity Saved ✅");
+
+                document.getElementById("activityForm").reset();
+                loadActivities();
+            } else {
+                const errText = await res.text();
+                console.error("Backend Error:", errText);
+                alert("Error: " + errText);
+            }
+
+        } catch (err) {
+            console.error("POST Error:", err);
+        }
+    });
+
+    // DELETE
+    async function deleteActivity(id) {
+        try {
+            await fetch(`${API}/${id}`, { method: "DELETE" });
+            loadActivities();
+        } catch (err) {
+            console.error("Delete Error:", err);
+        }
+    }
+
+    window.onload = () => {
+        loadActivities();
+        loadDest();
+    };
+</script>
+
+
+</body>
+</html>

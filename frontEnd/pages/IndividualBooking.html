@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | SmartTraveler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #13e4db;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text-muted: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: var(--primary); padding: 40px 20px; }
+
+        .checkout-container {
+            max-width: 900px; margin: 0 auto;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px;
+        }
+
+
+        .payment-card {
+            background: var(--white); padding: 40px; border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+        h2 { font-size: 1.8rem; margin-bottom: 30px; font-weight: 800; }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted); }
+        input {
+            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;
+            font-size: 1rem; transition: 0.3s;
+        }
+        input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(19, 228, 219, 0.1); }
+
+        .card-details { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .pay-btn {
+            width: 100%; background: var(--primary); color: white; padding: 18px;
+            border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+        }
+        .pay-btn:hover { background: #000; transform: translateY(-3px); }
+
+
+        .summary-card {
+            background: #f1f5f9; padding: 35px; border-radius: 30px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .summary-header h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; }
+        .booking-item {
+            display: flex; justify-content: space-between; margin-top: 20px;
+            padding-bottom: 15px; border-bottom: 1px dashed #cbd5e1;
+        }
+        .total-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 30px; font-size: 1.5rem; font-weight: 800;
+        }
+        .total-row span:last-child { color: #059669; }
+
+        .secure-badge {
+            margin-top: 30px; text-align: center; font-size: 0.8rem; color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) { .checkout-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="checkout-container">
+    <div class="payment-card">
+        <h2>Secure Payment</h2>
+
+        <div class="input-group">
+            <label>FULL NAME</label>
+            <input type="text" placeholder="John Doe" id="custName">
+        </div>
+
+        <div class="input-group">
+            <label>EMAIL ADDRESS</label>
+            <input type="email" placeholder="john@example.com">
+        </div>
+
+        <div class="input-group">
+            <label>CARD NUMBER</label>
+            <div style="position: relative;">
+                <input type="text" placeholder="xxxx xxxx xxxx xxxx">
+                <i class="fab fa-cc-visa" style="position: absolute; right: 15px; top: 18px; font-size: 1.2rem; color: #64748b;"></i>
+            </div>
+        </div>
+
+        <div class="card-details">
+            <div class="input-group">
+                <label>EXPIRY</label>
+                <input type="text" placeholder="MM / YY">
+            </div>
+            <div class="input-group">
+                <label>CVV</label>
+                <input type="password" placeholder="***">
+            </div>
+        </div>
+
+        <button class="pay-btn" onclick="processPayment()">
+            Confirm Payment
+        </button>
+
+        <div class="secure-badge">
+            <i class="fas fa-lock"></i> SSL Encrypted & Secure Connection
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-header">
+            <h3>Booking Summary</h3>
+            <p id="itemType" style="text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: var(--text-muted); font-weight: 800;">HOTEL STAY</p>
+
+            <div class="booking-item">
+                <span id="itemName" style="font-weight: 600;">Jetwing Lighthouse</span>
+                <span id="itemPrice">Rs. 45,000</span>
+            </div>
+
+            <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-muted);">
+                <p><i class="fas fa-calendar-check"></i> 1x Night/Visit</p>
+                <p><i class="fas fa-check-circle"></i> Instant Confirmation</p>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <div class="total-row">
+                <span>Total Due</span>
+                <span id="finalAmount">Rs. 45,000</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const item = urlParams.get('item');
+    const type = urlParams.get('type');
+    const price = urlParams.get('price');
+
+
+    window.onload = function() {
+        if(item) {
+            document.getElementById('itemName').innerText = item.charAt(0).toUpperCase() + item.slice(1);
+        }
+        if(type) {
+            document.getElementById('itemType').innerText = type + " BOOKING";
+        }
+
+
+        const finalPrice = price ? parseInt(price).toLocaleString() : "45,000";
+        document.getElementById('itemPrice').innerText = "Rs. " + finalPrice;
+        document.getElementById('finalAmount').innerText = "Rs. " + finalPrice;
+    }
+
+    function processPayment() {
+        const name = document.getElementById('custName').value;
+        if(!name) {
+            alert("Please enter your name!");
+            return;
+        }
+        alert("Thank you " + name + "! Your booking is confirmed. Check your email for details.");
+        window.location.href = "homepage.html";
+    }
+
+
+</script>
+
+</body>
+</html>

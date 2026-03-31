@@ -1,0 +1,10 @@
+package lk.ijse.smarttravelapi.repository;
+
+import lk.ijse.smarttravelapi.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserManageRepository extends JpaRepository<User, Long> {
+}
+
