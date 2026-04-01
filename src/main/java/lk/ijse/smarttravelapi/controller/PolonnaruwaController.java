@@ -37,8 +37,5 @@ public class PolonnaruwaController {
     }
 
 
-//    @GetMapping("/by-type/{type}")
-//    public List<PolonnaruwaDTO> getItemsByType(@PathVariable String type) {
-//        return polonnaruwaService.getItemsByType(type);
-//    }
+
 }

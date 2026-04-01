@@ -35,21 +35,3 @@ public class HotelManageController {
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 }
-//    // 4. DELETE HOTEL
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<String> deleteHotel(@PathVariable Long id) {
-//        try {
-//            hotelService.deleteHotel(id);
-//            return new ResponseEntity<>("Hotel Deleted Successfully!", HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-//        }
-//    }
-//
-//    // 5. SEARCH BY DESTINATION
-//    @GetMapping("/search/{destination}")
-//    public ResponseEntity<List<HotelDTO>> getHotelsByDestination(@PathVariable String destination) {
-//        List<HotelDTO> hotels = hotelService.getHotelsByDestination(destination);
-//        return new ResponseEntity<>(hotels, HttpStatus.OK);
-//    }
-//}

@@ -90,7 +90,7 @@ public class BookingController {
         }
         return ResponseEntity.status(404).body("Booking not found.");
     }
-    // GET ALL BOOKINGS
+
     @GetMapping("/all")
     public ResponseEntity<List<Booking>> getAllBookings() {
         List<Booking> allBookings = bookingService.getAllBookings();
