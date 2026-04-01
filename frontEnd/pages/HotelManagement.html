@@ -15,6 +15,10 @@
             --danger: #ef4444;
             --bg: #f8fafc;
             --white: #ffffff;
+            --sidebar-bg: #ffffff;
+            --primary-dark: #0f172a;
+            --text-light: #64748b;
+            --accent-blue: #e0f2fe;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -30,6 +34,7 @@
             position: fixed;
             height: 100vh;
             z-index: 100;
+            transition: 0.3s;
         }
 
         .admin-brand {
@@ -54,7 +59,7 @@
             color: var(--text-light);
             font-weight: 600;
             margin-bottom: 8px;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -64,31 +69,108 @@
 
         .nav-item.logout { color: var(--danger); margin-top: auto; }
 
-        /* MAIN CONTENT */
-        .main-content { margin-left: 260px; flex: 1; padding: 40px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .main-content { margin-left: 280px; flex: 1; padding: 40px; }
 
-        /* FORM CARD */
-        .card { background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 40px; }
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        input, select, textarea { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
 
-        .btn { padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .btn-save { background: var(--accent); color: white; margin-top: 20px; }
         .btn-update { background: var(--warning); color: white; margin-top: 20px; display: none; }
         .btn-cancel { background: #94a3b8; color: white; margin-top: 20px; display: none; }
 
-        /* TABLE */
-        table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        th { background: #f1f5f9; padding: 15px; text-align: left; font-size: 14px; color: #64748b; }
-        td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        .hotel-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .hotel-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
 
         .actions { display: flex; gap: 15px; }
-        .btn-edit { color: var(--warning); cursor: pointer; background: none; border: none; font-size: 18px; }
-        .btn-delete { color: var(--danger); cursor: pointer; background: none; border: none; font-size: 18px; }
+
+        .btn-edit, .btn-delete {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .btn-edit { color: var(--warning); }
+        .btn-delete { color: var(--danger); }
+
+        .hamburger {
+            display: none;
+            font-size: 22px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
 
         @media (max-width: 1024px) {
             .main-content { padding:20px; }
@@ -97,9 +179,10 @@
 
         @media (max-width: 768px) {
 
+            .hamburger { display: block; }
+
             .sidebar {
                 left:-100%;
-                position:fixed;
             }
 
             .sidebar.active {
@@ -108,21 +191,29 @@
 
             .main-content {
                 margin-left:0;
-            }
-
-            .hamburger {
-                display:block;
-            }
-
-            .overlay.active {
-                display:block;
+                padding:20px;
             }
 
             table {
                 display:block;
                 overflow-x:auto;
                 white-space:nowrap;
-            }}
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+        }
+
     </style>
 </head>
 <body>
@@ -143,45 +234,48 @@
     </div>
 </div>
 
-
 <main class="main-content">
     <div class="header">
+        <button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('active')">
+            <i class="fas fa-bars"></i>
+        </button>
         <h1>Hotel Management</h1>
         <p id="currentTime" style="color: #64748b; font-size: 14px;"></p>
     </div>
 
     <div class="card">
         <h3 id="formTitle"><i class="fas fa-plus-circle"></i> Add New Hotel</h3>
-        <input type="hidden" id="hotelId"> <div class="form-grid" style="margin-top: 20px;">
-        <div class="form-group">
-            <label>Hotel Name</label>
-            <input type="text" id="hotelName" placeholder="e.g. Amaya Lake">
+        <input type="hidden" id="hotelId">
+        <div class="form-grid" style="margin-top: 20px;">
+            <div class="form-group">
+                <label>Hotel Name</label>
+                <input type="text" id="hotelName">
+            </div>
+            <div class="form-group">
+                <label>Destination</label>
+                <input type="text" id="destination">
+            </div>
+            <div class="form-group">
+                <label>Room Type</label>
+                <select id="type">
+                    <option value="Luxury">Luxury</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Budget">Budget</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" id="price">
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Image URL</label>
+                <input type="text" id="imageUrl">
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Description</label>
+                <textarea id="desc"></textarea>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Destination (City)</label>
-            <input type="text" id="destination" placeholder="e.g. Ella">
-        </div>
-        <div class="form-group">
-            <label>Room Type</label>
-            <select id="type">
-                <option value="Luxury">Luxury</option>
-                <option value="Standard">Standard</option>
-                <option value="Budget">Budget</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Price Per Night (Rs.)</label>
-            <input type="number" id="price" placeholder="25000">
-        </div>
-        <div class="form-group" style="grid-column: span 2;">
-            <label>Image URL</label>
-            <input type="text" id="imageUrl" placeholder="https://image-link.com">
-        </div>
-        <div class="form-group" style="grid-column: span 2;">
-            <label>Description</label>
-            <textarea id="desc" rows="3" placeholder="Describe the hotel facilities..."></textarea>
-        </div>
-    </div>
 
         <button id="saveBtn" class="btn btn-save" onclick="saveHotel()">
             <i class="fas fa-save"></i> Save Hotel
@@ -216,7 +310,6 @@
 
     document.getElementById('currentTime').innerText = new Date().toDateString();
 
-
     async function loadHotels() {
         try {
             const response = await fetch(`${API_URL}/getAll`);
@@ -233,85 +326,13 @@
                             <td>${h.type}</td>
                             <td>Rs. ${h.pricePerNight}</td>
                             <td class="actions">
-                                <button class="btn-edit" onclick="editHotel(${h.id})">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-delete" onclick="deleteHotel(${h.id})">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                                <button class="btn-edit" onclick="editHotel(${h.id})"><i class="fas fa-edit"></i></button>
+                                <button class="btn-delete" onclick="deleteHotel(${h.id})"><i class="fas fa-trash-alt"></i></button>
                             </td>
-                        </tr>
-                    `;
+                        </tr>`;
             });
-        } catch (err) { console.error("Error loading:", err); }
+        } catch (err) { console.error(err); }
     }
-
-
-    async function saveHotel() {
-        const hotelData = getFormData();
-        if(!hotelData.name || !hotelData.pricePerNight) return alert("Fill mandatory fields!");
-
-        try {
-            const response = await fetch(`${API_URL}/save`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(hotelData)
-            });
-            if(response.ok) { alert("Hotel Saved!"); resetForm(); loadHotels(); }
-        } catch (err) { alert("Save failed!"); }
-    }
-
-
-    function editHotel(id) {
-        const hotel = allHotels.find(h => h.id === id);
-        if(!hotel) return;
-
-        document.getElementById('hotelId').value = hotel.id;
-        document.getElementById('hotelName').value = hotel.name;
-        document.getElementById('destination').value = hotel.destination;
-        document.getElementById('type').value = hotel.type;
-        document.getElementById('price').value = hotel.pricePerNight;
-        document.getElementById('imageUrl').value = hotel.image;
-        document.getElementById('desc').value = hotel.description;
-
-        // UI Changes
-        document.getElementById('formTitle').innerHTML = `<i class="fas fa-edit"></i> Edit Hotel: ${hotel.name}`;
-        document.getElementById('saveBtn').style.display = "none";
-        document.getElementById('updateBtn').style.display = "inline-flex";
-        document.getElementById('cancelBtn').style.display = "inline-flex";
-        window.scrollTo(0, 0);
-    }
-
-
-    async function updateHotel() {
-        const id = document.getElementById('hotelId').value;
-        const hotelData = getFormData();
-        hotelData.id = id; // Include ID for update
-
-        try {
-
-            const response = await fetch(`${API_URL}/save`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(hotelData)
-            });
-
-            if(response.ok) {
-                alert("Hotel Updated Successfully!");
-                resetForm();
-                loadHotels();
-            }
-        } catch (err) { alert("Update failed!"); }
-    }
-
-
-    async function deleteHotel(id) {
-        if(confirm("Delete this hotel?")) {
-            await fetch(`${API_URL}/delete/${id}`, { method: 'DELETE' });
-            loadHotels();
-        }
-    }
-
 
     function getFormData() {
         return {
@@ -322,20 +343,6 @@
             image: document.getElementById('imageUrl').value,
             description: document.getElementById('desc').value
         };
-    }
-
-    function resetForm() {
-        document.getElementById('hotelId').value = "";
-        document.getElementById('hotelName').value = "";
-        document.getElementById('destination').value = "";
-        document.getElementById('price').value = "";
-        document.getElementById('imageUrl').value = "";
-        document.getElementById('desc').value = "";
-
-        document.getElementById('formTitle').innerHTML = `<i class="fas fa-plus-circle"></i> Add New Hotel`;
-        document.getElementById('saveBtn').style.display = "inline-flex";
-        document.getElementById('updateBtn').style.display = "none";
-        document.getElementById('cancelBtn').style.display = "none";
     }
 
     window.onload = loadHotels;

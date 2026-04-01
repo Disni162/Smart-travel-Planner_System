@@ -136,6 +136,55 @@
             text-decoration:none;
         }
 
+        @media (max-width: 1024px){
+            .container{
+                height:auto;
+            }
+            .left-side{
+                padding:30px;
+            }
+            .right-side{
+                padding:30px;
+            }
+        }
+
+        @media (max-width: 768px){
+            body{
+                align-items:flex-start;
+            }
+            .container{
+                flex-direction:column;
+                height:auto;
+                border-radius:15px;
+            }
+            .left-side{
+                width:100%;
+                min-height:200px;
+                padding:30px 20px;
+            }
+            .left-side h2{
+                font-size:22px;
+            }
+            .right-side{
+                width:100%;
+                padding:30px 20px;
+            }
+        }
+
+        @media (max-width: 480px){
+            .left-side h2{
+                font-size:18px;
+            }
+            .logo-box{
+                font-size:16px;
+                padding:10px 20px;
+            }
+            .enter-btn{
+                font-size:14px;
+                padding:12px;
+            }
+        }
+
     </style>
 </head>
 

@@ -31,7 +31,6 @@
             display:flex;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width:280px;
             background:var(--sidebar-bg);
@@ -39,6 +38,8 @@
             padding:40px 25px;
             position:fixed;
             height:100vh;
+            transition:0.3s;
+            z-index:100;
         }
 
         .admin-brand {
@@ -78,14 +79,12 @@
             color:var(--danger);
         }
 
-        /* MAIN */
         .main {
             margin-left:280px;
             padding:40px;
             width:100%;
         }
 
-        /* CARD */
         .card {
             background:var(--white);
             padding:25px;
@@ -93,7 +92,6 @@
             margin-bottom:25px;
         }
 
-        /* FORM */
         .form-grid {
             display:grid;
             grid-template-columns:repeat(2,1fr);
@@ -117,7 +115,6 @@
             cursor:pointer;
         }
 
-        /* TABLE */
         table {
             width:100%;
             margin-top:15px;
@@ -141,13 +138,72 @@
             cursor:pointer;
         }
 
+        .hamburger {
+            display:none;
+            font-size:22px;
+            background:none;
+            border:none;
+            cursor:pointer;
+            margin-bottom:15px;
+        }
+
+        @media (max-width: 1024px){
+            .form-grid {
+                grid-template-columns:1fr;
+            }
+            .main {
+                padding:20px;
+            }
+        }
+
+        @media (max-width: 768px){
+
+            body {
+                flex-direction:column;
+            }
+
+            .hamburger {
+                display:block;
+            }
+
+            .sidebar {
+                left:-100%;
+                top:0;
+            }
+
+            .sidebar.active {
+                left:0;
+            }
+
+            .main {
+                margin-left:0;
+                padding:20px;
+            }
+
+            table {
+                display:block;
+                overflow-x:auto;
+                white-space:nowrap;
+            }
+        }
+
+        @media (max-width: 480px){
+
+            h2 {
+                font-size:20px;
+            }
+
+            .btn {
+                width:100%;
+            }
+
+        }
 
     </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
     <div class="admin-brand">
         <i class="fas fa-paper-plane"></i>
@@ -185,8 +241,11 @@
     </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
+
+    <button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('active')">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <h2>Activity Management</h2>
 
@@ -239,7 +298,6 @@
     const API = "http://localhost:8080/api/v1/activities";
     const DEST = "http://localhost:8080/api/v1/destinations";
 
-    // Load Activities
     async function loadActivities() {
         try {
             const res = await fetch(API);
@@ -263,11 +321,10 @@
             });
 
         } catch (err) {
-            console.error("Load Activities Error:", err);
+            console.error(err);
         }
     }
 
-    // Load Destinations
     async function loadDest() {
         try {
             const res = await fetch(DEST);
@@ -282,16 +339,14 @@
             });
 
         } catch (err) {
-            console.error("Load Dest Error:", err);
+            console.error(err);
         }
     }
-
 
     document.getElementById("activityForm").addEventListener("submit", async e => {
         e.preventDefault();
 
         const destinationId = actDestination.value;
-
 
         if (!destinationId) {
             alert("Please select destination");
@@ -308,8 +363,6 @@
             type: actType.value
         };
 
-        console.log("Sending:", obj);
-
         try {
             const res = await fetch(API, {
                 method: "POST",
@@ -318,29 +371,19 @@
             });
 
             if (res.ok) {
-                alert("Activity Saved ✅");
-
+                alert("Activity Saved");
                 document.getElementById("activityForm").reset();
                 loadActivities();
-            } else {
-                const errText = await res.text();
-                console.error("Backend Error:", errText);
-                alert("Error: " + errText);
             }
 
         } catch (err) {
-            console.error("POST Error:", err);
+            console.error(err);
         }
     });
 
-    // DELETE
     async function deleteActivity(id) {
-        try {
-            await fetch(`${API}/${id}`, { method: "DELETE" });
-            loadActivities();
-        } catch (err) {
-            console.error("Delete Error:", err);
-        }
+        await fetch(`${API}/${id}`, { method: "DELETE" });
+        loadActivities();
     }
 
     window.onload = () => {
@@ -348,7 +391,6 @@
         loadDest();
     };
 </script>
-
 
 </body>
 </html>

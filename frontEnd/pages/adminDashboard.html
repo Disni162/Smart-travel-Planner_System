@@ -31,7 +31,6 @@
             min-height: 100vh;
         }
 
-        /* --- SIDEBAR --- */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
@@ -76,7 +75,6 @@
 
         .nav-item.logout { color: var(--danger); margin-top: auto; }
 
-        /* --- MAIN CONTENT --- */
         .main {
             margin-left: 280px;
             width: calc(100% - 280px);
@@ -88,9 +86,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        /* --- STAT CARDS --- */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -117,7 +116,6 @@
         .stat-card h4 { color: var(--text-light); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
         .stat-card .value { font-size: 26px; font-weight: 800; color: var(--primary-dark); }
 
-        /* --- TRENDING TABLE --- */
         .table-container {
             background: var(--white);
             border-radius: 30px;
@@ -139,74 +137,66 @@
         }
         .luxury { background: #fef3c7; color: #d97706; }
         .budget { background: #dcfce7; color: #16a34a; }
-        /* =========================
-           RESPONSIVE DESIGN
-        ========================= */
 
-        /* TABLET */
+        .hamburger {
+            display: none;
+            background: var(--white);
+            border: none;
+            font-size: 20px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
         @media (max-width: 1024px) {
             .stats-container {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .main {
-                padding: 30px;
-            }
-
             .sidebar {
                 width: 240px;
             }
-
             .main {
                 margin-left: 240px;
                 width: calc(100% - 240px);
+                padding: 30px;
             }
         }
 
-        /* MOBILE */
         @media (max-width: 768px) {
 
             body {
                 flex-direction: column;
             }
 
-            /* SIDEBAR becomes top bar */
+            .hamburger {
+                display: block;
+            }
+
             .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 15px 20px;
+                position: fixed;
+                left: -100%;
+                top: 0;
+                width: 260px;
+                height: 100%;
+                transition: 0.3s ease;
             }
 
-            .nav-links {
-                display: flex;
-                overflow-x: auto;
-                gap: 10px;
+            .sidebar.active {
+                left: 0;
             }
 
-            .nav-item {
-                white-space: nowrap;
-                padding: 10px 12px;
-                font-size: 13px;
-            }
-
-            /* MAIN full width */
             .main {
                 margin-left: 0;
                 width: 100%;
                 padding: 20px;
             }
 
-            /* stats grid */
             .stats-container {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
 
-            /* table scroll */
             .table-container {
                 overflow-x: auto;
                 padding: 20px;
@@ -217,13 +207,12 @@
             }
 
             .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
             }
         }
 
-        /* SMALL MOBILE */
         @media (max-width: 480px) {
 
             .admin-brand {
@@ -237,33 +226,9 @@
             .table-header h2 {
                 font-size: 18px;
             }
-        }
-        .hamburger {
-            display: none;
-            background: var(--white);
-            border: none;
-            font-size: 20px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
 
-        /* mobile */
-        @media (max-width: 768px) {
-
-            .hamburger {
-                display: block;
-            }
-
-            .sidebar {
-                position: fixed;
-                left: -100%;
-                transition: 0.3s ease;
-            }
-
-            .sidebar.active {
-                left: 0;
+            .top-bar h2 {
+                font-size: 18px;
             }
         }
 
@@ -296,7 +261,6 @@
         <h2 style="font-weight: 800;">System Overview</h2>
         <div id="admin-info" style="display: flex; align-items: center; gap: 15px;">
             <div style="text-align: right;">
-<!--                <p style="font-weight: 700; font-size: 14px;">H.K. Disni Maleesha</p>-->
                 <p style="font-size: 12px; color: var(--text-light);">Admin Manager</p>
             </div>
             <img src="https://ui-avatars.com/api/?name=Disni+Maleesha&background=023e8a&color=fff" style="width: 45px; border-radius: 12px;">
@@ -365,11 +329,11 @@
         </table>
     </div>
 </div>
+
 <script>
     function toggleSidebar() {
         document.querySelector('.sidebar').classList.toggle('active');
     }
-
 
     async function loadDashboard() {
         try {
@@ -377,13 +341,10 @@
             const response = await fetch('http://localhost:8080/api/v1/dashboard/stats');
             const data = await response.json();
 
-
             document.getElementById('admin-info').innerHTML = `
-<!--            <p style="font-weight: 700; font-size: 14px;">H.K. Disni Maleesha</p>-->
             <p style="font-size: 12px; color: var(--text-light);">Admin Manager</p>
         `;
 
-            // backend real data
             const statsGrid = document.getElementById('stats-grid');
             const statsArray = [
                 { title: "Total Users", value: data.totalUsers, icon: "fas fa-user-friends" },
@@ -400,7 +361,6 @@
             </div>
         `).join('');
 
-            // 3. Trending Table
             const tableBody = document.getElementById('trending-table-body');
             tableBody.innerHTML = data.trending.map(dest => `
             <tr>
@@ -415,7 +375,6 @@
             console.error("Error fetching dashboard data:", error);
         }
     }
-
 
     window.onload = loadDashboard;
 </script>
