@@ -20,7 +20,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background-color: var(--soft-white); overflow-x: hidden; color: #334155; scroll-behavior: smooth; }
 
-    /* --- NAVIGATION --- */
     nav {
       position: fixed;
       top: 0;
@@ -48,7 +47,6 @@
     .btn-logout { background: rgba(255, 255, 255, 0.1); padding: 8px 18px; border-radius: 12px; display: flex; align-items: center; gap: 8px; }
     .btn-logout:hover { background: var(--logout-red) !important; transform: translateY(-2px); }
 
-    /* --- HERO & SEARCH --- */
     .hero {
       height: 70vh;
       background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('https://images.travelandleisureasia.com/wp-content/uploads/sites/4/2023/11/22150028/mirissa.jpeg') center/cover;
@@ -90,7 +88,6 @@
 
     .search-wrapper input::placeholder { color: rgba(255, 255, 255, 0.7); }
 
-    /* --- GRID SECTION --- */
     .section { padding: 80px 8%; }
     .section-title { text-align: center; margin-bottom: 50px; }
 
@@ -130,7 +127,6 @@
     }
     .btn-view:hover { background: var(--sl-green); }
 
-    /* Empty state message */
     #noResults {
       grid-column: 1 / -1;
       text-align: center;
@@ -140,116 +136,48 @@
 
     footer { background: var(--dark-blue); color: white; padding: 60px 8% 30px; text-align: center; }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .menu-toggle {
+      display: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
     }
 
-
-
-
     @media (max-width: 992px) {
-      nav {
-        padding: 10px 5%;
-      }
 
+      nav { padding: 10px 5%; }
 
-      .menu-toggle {
-        display: block;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-      }
-
+      .menu-toggle { display: block; }
 
       .nav-links {
         position: fixed;
-        top: 70px;
-        right: -100%;
-        width: 100%;
-        height: calc(100vh - 70px);
-        background: rgba(15, 23, 42, 0.95);
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background: #0f172a;
         flex-direction: column;
-        padding: 40px;
+        padding: 80px 40px;
         transition: 0.4s ease-in-out;
-        text-align: center;
-        gap: 30px;
-        backdrop-filter: blur(10px);
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
       }
 
+      .nav-links.active { left: 0; }
 
-      .nav-links.active {
-        right: 0;
-      }
-
-      .nav-links li {
-        width: 100%;
-      }
-
-      .btn-logout {
-        justify-content: center;
-        width: fit-content;
-        margin: 0 auto;
-      }
+      .nav-links li { margin: 15px 0; }
     }
 
-
     @media (max-width: 768px) {
-      .hero {
-        height: 50vh;
-      }
-
-      .hero h1 {
-        font-size: 32px;
-      }
-
-      .search-wrapper {
-        width: 95%;
-      }
-
-      .section {
-        padding: 40px 5%;
-      }
-
+      .hero { height: 50vh; }
+      .hero h1 { font-size: 32px; }
+      .search-wrapper { width: 95%; }
+      .section { padding: 40px 5%; }
 
       .grid {
-        display: grid;
-
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 20px;
       }
-
-      @media (max-width: 992px) {
-
-        .menu-toggle {
-          display: block !important;
-          cursor: pointer;
-          z-index: 2100;
-        }
-
-
-        .nav-links {
-          position: fixed;
-          top: 0;
-          left: -100%;
-          width: 280px;
-          height: 100vh;
-          background: #0f172a;
-          flex-direction: column;
-          padding: 80px 40px;
-          transition: 0.4s ease-in-out;
-          box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-
-        .nav-links.active {
-          left: 0;
-        }
-
-        .nav-links li {
-          margin: 15px 0;
-        }
-      }}
+    }
   </style>
 </head>
 <body>
@@ -259,16 +187,15 @@
     <a href="homepage.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
     <a href="#" class="logo">Smart<span>Traveler</span></a>
   </div>
-  <div class="menu-toggle" id="mobile-menu" style="display: none;">
+  <div class="menu-toggle" id="mobile-menu">
     <i class="fas fa-bars"></i>
   </div>
-  <ul  id="nav-list" class="nav-links">
+  <ul id="nav-list" class="nav-links">
     <li><a href="about.html">About</a></li>
     <li><a href="hotel.html">Hotels</a></li>
     <li><a href="destinations.html">Destinations</a></li>
     <li><a href="activity.html">Activity</a></li>
     <li><a href="tripPlanner.html">Trip Builder</a></li>
-<!--    <li><a href="#">Booking</a></li>-->
     <li><a href="index.html" class="btn-logout">Logout <i class="fas fa-sign-out-alt"></i></a></li>
   </ul>
 </nav>
@@ -287,8 +214,7 @@
     <p>Discover the beauty of the pearl of the Indian Ocean</p>
   </div>
 
-  <div class="grid" id="destinationContainer">
-  </div>
+  <div class="grid" id="destinationContainer"></div>
 
   <div id="noResults">
     <i class="fas fa-map-marked-alt fa-3x" style="color: #cbd5e1; margin-bottom: 15px;"></i>
@@ -304,102 +230,72 @@
   const menuBtn = document.getElementById('mobile-menu');
   const navList = document.getElementById('nav-list');
 
-  if (menuBtn && navList) {
-    menuBtn.addEventListener('click', () => {
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+    const icon = menuBtn.querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
 
-      navList.classList.toggle('active');
-
-
-      const icon = menuBtn.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-      }
-    });
-  }
   let allDestinations = [];
 
-  // LOAD DATA
   async function loadDestinations() {
     const res = await fetch("http://localhost:8080/api/v1/destinations");
     const data = await res.json();
-
     allDestinations = data.data;
     displayDestinations(allDestinations);
   }
 
-  //  DISPLAY
   function displayDestinations(data) {
     const container = document.getElementById("destinationContainer");
+    const noResults = document.getElementById("noResults");
     container.innerHTML = "";
 
-    data.forEach(dest => {
+    if (data.length === 0) {
+      noResults.style.display = "block";
+      return;
+    } else {
+      noResults.style.display = "none";
+    }
 
+    data.forEach(dest => {
       const card = `
       <div class="card">
         <img src="${dest.image}" class="card-img">
         <div class="card-body">
           <h3>${dest.name}</h3>
           <p>${dest.description.substring(0,80)}...</p>
-
-          <a href="${getDetailsPage(dest)}" class="btn-view">
-            View Details
-          </a>
+          <a href="${getDetailsPage(dest)}" class="btn-view">View Details</a>
         </div>
-      </div>
-    `;
-
+      </div>`;
       container.insertAdjacentHTML("beforeend", card);
     });
   }
 
-
-
   function getDetailsPage(dest) {
     const name = dest.name.toLowerCase();
 
-    if (name.includes("ella")) {
-      return `destinationDetailsElla.html?id=${dest.id}`;
-    }
-    if (name.includes("galle")) {
-      return `destinationDetailsGalle.html?id=${dest.id}`;
-    }
-    if (name.includes("mirissa")) {
-      return `destinationMirissa.html?id=${dest.id}`;
-    }
-    if (name.includes("sigiriya")) {
-      return `destinationSigiriya.html?id=${dest.id}`;
-    }
-    if (name.includes("polonnaruwa")) {
-      return `destinationPolonnruwa.html?id=${dest.id}`;
-    }
-    if (name.includes("nuwara eliya")) {
-      return `destinationNuwaraeliya.html?id=${dest.id}`;
-    }
-    if (name.includes("jaffna")) {
-      return `destinationJeffna.html?id=${dest.id}`;
-    }
-    if (name.includes("anuradhapura")) {
-      return `destinationaAnuradhapura.html?id=${dest.id}`;
-    }
+    if (name.includes("ella")) return `destinationDetailsElla.html?id=${dest.id}`;
+    if (name.includes("galle")) return `destinationDetailsGalle.html?id=${dest.id}`;
+    if (name.includes("mirissa")) return `destinationMirissa.html?id=${dest.id}`;
+    if (name.includes("sigiriya")) return `destinationSigiriya.html?id=${dest.id}`;
+    if (name.includes("polonnaruwa")) return `destinationPolonnruwa.html?id=${dest.id}`;
+    if (name.includes("nuwara eliya")) return `destinationNuwaraeliya.html?id=${dest.id}`;
+    if (name.includes("jaffna")) return `destinationJeffna.html?id=${dest.id}`;
+    if (name.includes("anuradhapura")) return `destinationaAnuradhapura.html?id=${dest.id}`;
 
-    // Default page if no specific match is found
     return `destinationDetails.html?id=${dest.id}`;
   }
 
-  //  SEARCH
   function filterDestinations() {
     const search = document.getElementById("destSearch").value.toLowerCase();
-
     const filtered = allDestinations.filter(d =>
             d.name.toLowerCase().includes(search)
     );
-
     displayDestinations(filtered);
   }
 
   window.onload = loadDestinations;
-
 </script>
 
 </body>
